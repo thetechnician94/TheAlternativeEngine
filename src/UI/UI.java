@@ -313,6 +313,14 @@ public class UI extends javax.swing.JFrame {
         invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         jCheckBox1.setBackground(getColor(set.getValue("WindowBackground")));
         jCheckBox1.setForeground(getColor(set.getValue("TextColor")));
+        debugPanel.setBackground(getColor(set.getValue("WindowBackground")));
+        debugPanel.setForeground(getColor(set.getValue("TextColor")));
+        jLabel1.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
+        jLabel2.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
+        jLabel3.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
+        jLabel1.setForeground(getColor(set.getValue("TextColor")));
+        jLabel2.setForeground(getColor(set.getValue("TextColor")));
+        jLabel3.setForeground(getColor(set.getValue("TextColor")));
     }
 
     private void initColorDefaults() {
@@ -341,6 +349,15 @@ public class UI extends javax.swing.JFrame {
         invText.setFont(new Font("Courier New", Font.BOLD, 24));
         jCheckBox1.setBackground(Color.BLACK);
         jCheckBox1.setForeground(Color.WHITE);
+        debugPanel.setBackground(Color.BLACK);
+        debugPanel.setForeground(Color.WHITE);
+        jLabel1.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel2.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel3.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel1.setForeground(Color.WHITE);
+        jLabel2.setForeground(Color.WHITE);
+        jLabel3.setForeground(Color.WHITE);
+
     }
 
     private void error(String title, String message) {
@@ -598,12 +615,12 @@ public class UI extends javax.swing.JFrame {
                         .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1)
                             .addGroup(debugPanelLayout.createSequentialGroup()
-                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3)
+                                    .addComponent(jTextField2)
+                                    .addComponent(jTextField4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                     .addComponent(jTextField5))))))
                 .addContainerGap())
         );
