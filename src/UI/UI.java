@@ -137,8 +137,11 @@ public class UI extends javax.swing.JFrame {
     }
 
     private String formatTitle(String text) {
-        int height = jScrollPane2.getHeight()-(jScrollPane2.getHeight()/2);
-        return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text) + "</p></td></tr></table>";
+        int height = jScrollPane2.getHeight() - (jScrollPane2.getHeight() / 2);
+        if (set == null) {
+            return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue("255,255,255") + ";font-size:" + 36 + "px; font-family:" + "Arial" + "'>" + "The Alternative Engine 1.0" + "</p></td></tr></table>";
+        }
+        return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p></td></tr></table>";
     }
 
     private void initSettings(String dir) throws FileNotFoundException, IOException {
@@ -186,6 +189,9 @@ public class UI extends javax.swing.JFrame {
         }
         if (set.addKey("DamageStat")) {
             set.updateValue("DamageStat", "Strength");
+        }
+        if (set.addKey("DamageHandicap")) {
+            set.updateValue("DamageHandicap", "0.25");
         }
         if (set.addKey("MaxCombatLog")) {
             set.updateValue("MaxCombatLog", "2");
@@ -1098,13 +1104,14 @@ public class UI extends javax.swing.JFrame {
     private void processAttack(String name) {
         Weapon weapon = weapons.getWeapon(name);
         int dmg = weapon.getDamage();
+        int dmgHandicap = (int) Math.ceil((Double.parseDouble(set.getValue("DamageHandicap")) * ((double) (dmg))));
         int maxStat = Integer.parseInt(set.getValue("MaxStat"));
         int rand = (int) (Math.random() * maxStat);
         int buffer = (int) Math.ceil((Double.parseDouble(set.getValue("HitHandicap")) * (double) (maxStat)));
         int hitStat = player.getStat(set.getValue("HitChanceStat")) + buffer;
         int damageStat = player.getStat(set.getValue("DamageStat"));
         double damagePercent = (double) (damageStat) / (double) (maxStat);
-        dmg = (int) Math.ceil((double) damagePercent * (double) dmg);
+        dmg = dmgHandicap + (int) Math.ceil((double) damagePercent * (double) dmg);
         if (hitStat > rand) {
             currStage.getCombat().attackEnemy(dmg);
             currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage");
@@ -1260,7 +1267,15 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jScrollPane2AncestorResized(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jScrollPane2AncestorResized
-        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+        if (titlePane == null) {
+            return;
+        }
+        if (set != null) {
+            titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+        } else {
+            titlePane.setText("<html><h1>" + formatTitle("The Alternative Engine 1.0") + "</h1></html>");
+        }
+
     }//GEN-LAST:event_jScrollPane2AncestorResized
     private void updateDebugInfo() {
         jTextField1.setText(currStage.getId() + "");

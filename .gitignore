@@ -7,5 +7,3 @@ dist/
 nbdist/
 .nb-gradle/
 defaultSettings.txt
-
-nbproject/project\.properties
