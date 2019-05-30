@@ -197,15 +197,12 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("UseInventory")) {
             set.updateValue("UseInventory", "FALSE");
         }
-<<<<<<< HEAD
-=======
         if (set.addKey("UseDebug")) {
             set.updateValue("UseDebug", "FALSE");
         }
         if (set.addKey("UseHealth")) {
             set.updateValue("UseHealth", "TRUE");
         }
->>>>>>> DebugMenu
         if (set.addKey("ShowOptionsWhereReqsAreNotMet")) {
             set.updateValue("ShowOptionsWhereReqsAreNotMet", "TRUE");
         }
@@ -1191,7 +1188,7 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_saveGameButtonActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        int stage = Integer.parseInt(jTextField1.getName());
+        int stage = Integer.parseInt(jTextField1.getText());
         gotoStage(stage);
     }//GEN-LAST:event_jTextField1ActionPerformed
 
@@ -1213,7 +1210,7 @@ public class UI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            sm = new StageManager(new File(gameDir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
+            sm = new StageManager(new File(gameDir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"), Integer.parseInt(set.getValue("MaxStat")));
         } catch (Exception ex) {
             error("Load Error", ex.getMessage());
         }
@@ -1237,7 +1234,7 @@ public class UI extends javax.swing.JFrame {
             error("Bad value", "Item cannot be empty");
             return;
         }
-        player.adjustStat(stat, amt);
+        player.adjustStat(stat, amt, Integer.parseInt(set.getValue("MaxStat")));
         refreshStats();
     }
 
