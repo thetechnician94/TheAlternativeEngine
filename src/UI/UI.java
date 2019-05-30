@@ -55,8 +55,8 @@ public class UI extends javax.swing.JFrame {
         initColorDefaults();
         htmlPanel.add(htmlScroll);
         tabPanel.addTab("Menu", mainMenu);
-        titleLabel.setText("Game Engine 1.0");
-        this.setTitle("Game Engine 1.0");
+        titlePane.setText("<h1>" + "The Alternative Engine 1.0" + "</h1>");
+        this.setTitle("The Alternative Engine 1.0");
         initGameSettings();
         if (!gameSettings.getValue("DefaultGame").equals("None")) {
             importGame(gameSettings.getValue("DefaultGame"));
@@ -115,7 +115,7 @@ public class UI extends javax.swing.JFrame {
         initTextArea();
         initColor();
         initWeapons(dir);
-        titleLabel.setText(set.getValue("GameName"));
+        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
         this.setTitle(set.getValue("GameName"));
         startGameButton.setEnabled(true);
         saveGameButton.setEnabled(true);
@@ -134,6 +134,11 @@ public class UI extends javax.swing.JFrame {
 
     private void initWeapons(String dir) {
         weapons = new Weapons(dir + "/" + set.getValue("Weapons"), set.getValue("StageDelimiter"));
+    }
+
+    private String formatTitle(String text) {
+        int height = jScrollPane2.getHeight()-(jScrollPane2.getHeight()/2);
+        return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text) + "</p></td></tr></table>";
     }
 
     private void initSettings(String dir) throws FileNotFoundException, IOException {
@@ -163,6 +168,9 @@ public class UI extends javax.swing.JFrame {
         }
         if (set.addKey("TextSize")) {
             set.updateValue("TextSize", "14");
+        }
+        if (set.addKey("TitleSize")) {
+            set.updateValue("TitleSize", "24");
         }
         if (set.addKey("Font")) {
             set.updateValue("Font", "Arial");
@@ -326,13 +334,22 @@ public class UI extends javax.swing.JFrame {
         statText.setBackground(getColor(set.getValue("WindowBackground")));
         invText.setForeground(getColor(set.getValue("TextColor")));
         invText.setBackground(getColor(set.getValue("WindowBackground")));
-        titleLabel.setForeground(getColor(set.getValue("TextColor")));
-        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(set.getValue("TextSize"))));
+        titlePane.setBackground(getColor(set.getValue("WindowBackground")));
+        titlePane.setForeground(getColor(set.getValue("TextColor")));
+        titlePane.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(set.getValue("TextSize"))));
         tabPanel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         statText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         jCheckBox1.setBackground(getColor(set.getValue("WindowBackground")));
         jCheckBox1.setForeground(getColor(set.getValue("TextColor")));
+        debugPanel.setBackground(getColor(set.getValue("WindowBackground")));
+        debugPanel.setForeground(getColor(set.getValue("TextColor")));
+        jLabel1.setFont(new Font(set.getValue("Font"), Font.BOLD, 14));
+        jLabel2.setFont(new Font(set.getValue("Font"), Font.BOLD, 14));
+        jLabel3.setFont(new Font(set.getValue("Font"), Font.BOLD, 14));
+        jLabel1.setForeground(getColor(set.getValue("TextColor")));
+        jLabel2.setForeground(getColor(set.getValue("TextColor")));
+        jLabel3.setForeground(getColor(set.getValue("TextColor")));
     }
 
     private void initColorDefaults() {
@@ -354,13 +371,23 @@ public class UI extends javax.swing.JFrame {
         statText.setBackground(Color.BLACK);
         invText.setForeground(Color.WHITE);
         invText.setBackground(Color.BLACK);
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Courier New", Font.BOLD, 16));
+        titlePane.setBackground(Color.BLACK);
+        titlePane.setForeground(Color.WHITE);
+        titlePane.setFont(new Font("Courier New", Font.BOLD, 16));
         tabPanel.setFont(new Font("Courier New", Font.BOLD, 24));
         statText.setFont(new Font("Courier New", Font.BOLD, 24));
         invText.setFont(new Font("Courier New", Font.BOLD, 24));
         jCheckBox1.setBackground(Color.BLACK);
         jCheckBox1.setForeground(Color.WHITE);
+        debugPanel.setBackground(Color.BLACK);
+        debugPanel.setForeground(Color.WHITE);
+        jLabel1.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel2.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel3.setFont(new Font("Courier New", Font.BOLD, 14));
+        jLabel1.setForeground(Color.WHITE);
+        jLabel2.setForeground(Color.WHITE);
+        jLabel3.setForeground(Color.WHITE);
+
     }
 
     private void error(String title, String message) {
@@ -400,8 +427,9 @@ public class UI extends javax.swing.JFrame {
         startGameButton = new javax.swing.JButton();
         saveGameButton = new javax.swing.JButton();
         loadGameButton = new javax.swing.JButton();
-        titleLabel = new javax.swing.JLabel();
         importGameButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        titlePane = new javax.swing.JEditorPane();
         jFileChooser1 = new javax.swing.JFileChooser();
         debugPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -509,15 +537,29 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
-        titleLabel.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
         importGameButton.setText("Import Game");
         importGameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 importGameButtonActionPerformed(evt);
             }
         });
+
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane2.addHierarchyBoundsListener(new java.awt.event.HierarchyBoundsListener() {
+            public void ancestorMoved(java.awt.event.HierarchyEvent evt) {
+            }
+            public void ancestorResized(java.awt.event.HierarchyEvent evt) {
+                jScrollPane2AncestorResized(evt);
+            }
+        });
+
+        titlePane.setEditable(false);
+        titlePane.setBorder(null);
+        titlePane.setContentType("text/html"); // NOI18N
+        titlePane.setText("");
+        jScrollPane2.setViewportView(titlePane);
 
         javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
         mainMenu.setLayout(mainMenuLayout);
@@ -526,6 +568,7 @@ public class UI extends javax.swing.JFrame {
             .addGroup(mainMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addComponent(startGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(mainMenuLayout.createSequentialGroup()
                         .addComponent(saveGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -535,9 +578,8 @@ public class UI extends javax.swing.JFrame {
                         .addComponent(importGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 9, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(titleLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         mainMenuLayout.setVerticalGroup(
             mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -546,9 +588,9 @@ public class UI extends javax.swing.JFrame {
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(importGameButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveGameButton)
                     .addComponent(loadGameButton))
@@ -618,12 +660,12 @@ public class UI extends javax.swing.JFrame {
                         .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1)
                             .addGroup(debugPanelLayout.createSequentialGroup()
-                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3)
+                                    .addComponent(jTextField2)
+                                    .addComponent(jTextField4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                     .addComponent(jTextField5))))))
                 .addContainerGap())
         );
@@ -1216,6 +1258,10 @@ public class UI extends javax.swing.JFrame {
         }
         drawStage();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jScrollPane2AncestorResized(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jScrollPane2AncestorResized
+        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+    }//GEN-LAST:event_jScrollPane2AncestorResized
     private void updateDebugInfo() {
         jTextField1.setText(currStage.getId() + "");
     }
@@ -1407,6 +1453,7 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -1421,6 +1468,6 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JScrollPane statScroll;
     private javax.swing.JTextArea statText;
     private javax.swing.JTabbedPane tabPanel;
-    private javax.swing.JLabel titleLabel;
+    private javax.swing.JEditorPane titlePane;
     // End of variables declaration//GEN-END:variables
 }
