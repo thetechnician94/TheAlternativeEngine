@@ -40,7 +40,7 @@ public class Player {
         return out;
     }
 
-    public void adjustStat(String name, int adjustment) {
+    public void adjustStat(String name, int adjustment, int max) {
         for (Stat stat : stats) {
             if (stat.getName().equals(name)) {
                 stat.adjustStat(adjustment);
@@ -48,9 +48,9 @@ public class Player {
             }
         }
         if (adjustment >= 0) {
-            stats.add(new Stat(name, adjustment));
+            stats.add(new Stat(name, adjustment, max));
         } else {
-            stats.add(new Stat(name, 0));
+            stats.add(new Stat(name, 0, max));
         }
     }
 
@@ -91,12 +91,14 @@ public class Player {
             inv.add(new Item(name, 0));
         }
     }
-    public void resetPlayer(){
+
+    public void resetPlayer() {
         stats.clear();
         inv.clear();
     }
-    public void setStat(String name, int adjustment) {
-        stats.add(new Stat(name, adjustment));
+
+    public void setStat(String name, int adjustment, int max) {
+        stats.add(new Stat(name, adjustment, max));
     }
 
     public void setInv(String name, int adjustment) {

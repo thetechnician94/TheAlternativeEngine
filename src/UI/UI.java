@@ -96,9 +96,8 @@ public class UI extends javax.swing.JFrame {
             }
         }
         try {
-
             try {
-                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
+                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"), Integer.parseInt(set.getValue("MaxCombatLog")));
             } catch (NumberFormatException ex) {
                 error("Stage Loading Error", ex.getMessage());
                 return;
@@ -171,14 +170,32 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("UseStats")) {
             set.updateValue("UseStats", "TRUE");
         }
+        if (set.addKey("HitChanceStat")) {
+            set.updateValue("HitChanceStat", "Agility");
+        }
+        if (set.addKey("HitHandicap")) {
+            set.updateValue("HitHandicap", "0.25");
+        }
+        if (set.addKey("DamageStat")) {
+            set.updateValue("DamageStat", "Strength");
+        }
+        if (set.addKey("MaxCombatLog")) {
+            set.updateValue("MaxCombatLog", "2");
+        }
+        if (set.addKey("MaxStat")) {
+            set.updateValue("MaxStat", "40");
+        }
+        if (set.addKey("UseHealth")) {
+            set.updateValue("UseHealth", "TRUE");
+        }
+        if (set.addKey("MaxHealth")) {
+            set.updateValue("MaxHealth", "100");
+        }
         if (set.addKey("StatFile")) {
             set.updateValue("StatFile", "Stats.txt");
         }
         if (set.addKey("UseInventory")) {
             set.updateValue("UseInventory", "FALSE");
-        }
-        if (set.addKey("UseHealth")) {
-            set.updateValue("UseHealth", "TRUE");
         }
         if (set.addKey("ShowOptionsWhereReqsAreNotMet")) {
             set.updateValue("ShowOptionsWhereReqsAreNotMet", "TRUE");
@@ -212,7 +229,7 @@ public class UI extends javax.swing.JFrame {
             ArrayList<Stat> statArray = new ArrayList();
             for (int i = 0; i < statNames.length; i++) {
                 try {
-                    statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i])));
+                    statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
                 } catch (NumberFormatException ex) {
                     error("Stat Loading Error", ex.getMessage());
                     System.exit(-8);
@@ -902,7 +919,7 @@ public class UI extends javax.swing.JFrame {
         Option option = currStage.getOptions().get(optionId - 1);
         if (option.getStatMod().length > 0) {
             for (int i = 0; i < option.getStatMod().length; i++) {
-                player.adjustStat(option.getStatMod()[i], option.getStatModAmt()[i]);
+                player.adjustStat(option.getStatMod()[i], option.getStatModAmt()[i], Integer.parseInt(set.getValue("MaxStat")));
             }
         }
         if (option.getItemMod().length > 0) {
@@ -916,7 +933,7 @@ public class UI extends javax.swing.JFrame {
 
     private void attackPlayer() {
         int enemyDamage = currStage.getCombat().enemyAttacks();
-        player.adjustStat("Health", enemyDamage * -1);
+        player.adjustStat("Health", enemyDamage * -1, Integer.parseInt(set.getValue("MaxStat")));
         if (enemyDamage > 0) {
             currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " attacks you for " + enemyDamage + " damage");
         } else {
@@ -927,8 +944,19 @@ public class UI extends javax.swing.JFrame {
     private void processAttack(String name) {
         Weapon weapon = weapons.getWeapon(name);
         int dmg = weapon.getDamage();
-        currStage.getCombat().attackEnemy(dmg);
-        currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage");
+        int maxStat = Integer.parseInt(set.getValue("MaxStat"));
+        int rand = (int) (Math.random() * maxStat);
+        int buffer = (int) Math.ceil((Double.parseDouble(set.getValue("HitHandicap")) * (double) (maxStat)));
+        int hitStat = player.getStat(set.getValue("HitChanceStat")) + buffer;
+        int damageStat = player.getStat(set.getValue("DamageStat"));
+        double damagePercent = (double) (damageStat) / (double) (maxStat);
+        dmg = (int) Math.ceil((double) damagePercent * (double) dmg);
+        if (hitStat > rand) {
+            currStage.getCombat().attackEnemy(dmg);
+            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage");
+        } else {
+            currStage.getCombat().addToLog("Your attack misses");
+        }
         if (!weapon.getReqItem().isEmpty()) {
             player.adjustInv(weapon.getReqItem(), weapon.getReqItemAmt() * -1);
         }
@@ -1098,7 +1126,7 @@ public class UI extends javax.swing.JFrame {
                 }
             } else if (step == 2) {
                 String[] parse = line.split(":");
-                player.setStat(parse[0], Integer.parseInt(parse[1].trim()));
+                player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxStat")));
             } else {
                 stage = Integer.parseInt(line);
 

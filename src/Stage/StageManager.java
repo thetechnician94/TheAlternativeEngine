@@ -20,10 +20,13 @@ public class StageManager {
 
     private ArrayList<Stage> stages = new ArrayList();
     private String delimiter = "";
+    private int maxLog;
 
-    public StageManager(File stageFile, String delimiter) throws FileNotFoundException, NumberFormatException, NoSuchElementException, DuplicateStageException {
+    public StageManager(File stageFile, String delimiter, int max) throws FileNotFoundException, NumberFormatException, NoSuchElementException, DuplicateStageException {
         this.delimiter = delimiter;
+         this.maxLog = max;
         loadStages(stageFile);
+       
     }
 
     private void loadStages(File stageFile) throws FileNotFoundException, NumberFormatException, NoSuchElementException, DuplicateStageException {
@@ -149,7 +152,7 @@ public class StageManager {
 
             }
         }
-        return new Combat(enemyName, enemyHealth, enemyBaseDamage, enemyDamageRange, enemyType, hitChance, deathStage, winStage, firstAttack);
+        return new Combat(enemyName, enemyHealth, enemyBaseDamage, enemyDamageRange, enemyType, hitChance, deathStage, winStage, firstAttack, maxLog);
     }
 
     private Option parseOption(int id, String bulkText) throws NoSuchElementException, NumberFormatException {

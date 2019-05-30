@@ -13,10 +13,12 @@ public class Stat {
 
     private String name;
     private int value;
+    private int maxValue;
 
-    public Stat(String name, int value) {
+    public Stat(String name, int value, int max) {
         this.name = name;
         this.value = value;
+        this.maxValue = max;
     }
 
     /**
@@ -47,8 +49,8 @@ public class Stat {
         if (this.value < 0) {
             this.setValue(0);
         }
-        if (this.value > 100) {
-            this.setValue(100);
+        if (this.value > maxValue) {
+            this.setValue(maxValue);
         }
 
     }
