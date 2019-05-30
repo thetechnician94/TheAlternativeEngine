@@ -96,9 +96,8 @@ public class UI extends javax.swing.JFrame {
             }
         }
         try {
-
             try {
-                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
+                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"), Integer.parseInt(set.getValue("MaxCombatLog")));
             } catch (NumberFormatException ex) {
                 error("Stage Loading Error", ex.getMessage());
                 return;
@@ -179,6 +178,9 @@ public class UI extends javax.swing.JFrame {
         }
         if (set.addKey("DamageStat")) {
             set.updateValue("DamageStat", "Strength");
+        }
+        if (set.addKey("MaxCombatLog")) {
+            set.updateValue("MaxCombatLog", "2");
         }
         if (set.addKey("MaxStat")) {
             set.updateValue("MaxStat", "40");
@@ -942,7 +944,6 @@ public class UI extends javax.swing.JFrame {
     private void processAttack(String name) {
         Weapon weapon = weapons.getWeapon(name);
         int dmg = weapon.getDamage();
-
         int maxStat = Integer.parseInt(set.getValue("MaxStat"));
         int rand = (int) (Math.random() * maxStat);
         int buffer = (int) Math.ceil((Double.parseDouble(set.getValue("HitHandicap")) * (double) (maxStat)));
