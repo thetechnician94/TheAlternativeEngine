@@ -177,6 +177,9 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("UseInventory")) {
             set.updateValue("UseInventory", "FALSE");
         }
+        if (set.addKey("UseDebug")) {
+            set.updateValue("UseDebug", "FALSE");
+        }
         if (set.addKey("UseHealth")) {
             set.updateValue("UseHealth", "TRUE");
         }
@@ -234,6 +237,9 @@ public class UI extends javax.swing.JFrame {
         }
         if (Boolean.parseBoolean(set.getValue("UseStats"))) {
             tabPanel.addTab("Stats", statPanel);
+        }
+        if (Boolean.parseBoolean(set.getValue("UseDebug"))) {
+            tabPanel.addTab("Debug", debugPanel);
         }
 
     }
@@ -377,6 +383,16 @@ public class UI extends javax.swing.JFrame {
         titleLabel = new javax.swing.JLabel();
         importGameButton = new javax.swing.JButton();
         jFileChooser1 = new javax.swing.JFileChooser();
+        debugPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         tabPanel = new javax.swing.JTabbedPane();
         htmlPanel = new javax.swing.JPanel();
@@ -521,6 +537,98 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jLabel1.setText("Stage Number:");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Inventory Mod:");
+
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Stat Mod:");
+
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Refresh Stages From File");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout debugPanelLayout = new javax.swing.GroupLayout(debugPanel);
+        debugPanel.setLayout(debugPanelLayout);
+        debugPanelLayout.setHorizontalGroup(
+            debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, debugPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                    .addGroup(debugPanelLayout.createSequentialGroup()
+                        .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1)
+                            .addGroup(debugPanelLayout.createSequentialGroup()
+                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField3)
+                                    .addComponent(jTextField5))))))
+                .addContainerGap())
+        );
+        debugPanelLayout.setVerticalGroup(
+            debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(debugPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(debugPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 439, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -598,6 +706,7 @@ public class UI extends javax.swing.JFrame {
             error("Staging Error", "The stage this option references does not exist");
             return;
         }
+        updateDebugInfo();
         playMusic();
         drawStage();
     }
@@ -1046,6 +1155,76 @@ public class UI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_saveGameButtonActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        int stage = Integer.parseInt(jTextField1.getName());
+        gotoStage(stage);
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        debugItemMod();
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        debugItemMod();
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        debugStatMod();
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        debugStatMod();
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            sm = new StageManager(new File(gameDir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
+        } catch (Exception ex) {
+            error("Load Error", ex.getMessage());
+        }
+        drawStage();
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private void updateDebugInfo() {
+        jTextField1.setText(currStage.getId() + "");
+    }
+
+    private void debugStatMod() {
+        String stat = "";
+        int amt = 0;
+        try {
+            stat = jTextField4.getText();
+            amt = Integer.parseInt(jTextField5.getText());
+        } catch (NumberFormatException e) {
+            error("Bad value", e.getMessage());
+            return;
+        }
+        if (stat.isEmpty()) {
+            error("Bad value", "Item cannot be empty");
+            return;
+        }
+        player.adjustStat(stat, amt);
+        refreshStats();
+    }
+
+    private void debugItemMod() {
+        String item = "";
+        int qty = 0;
+        try {
+            item = jTextField2.getText();
+            qty = Integer.parseInt(jTextField3.getText());
+        } catch (NumberFormatException e) {
+            error("Bad value", e.getMessage());
+            return;
+        }
+        if (item.isEmpty()) {
+            error("Bad value", "Item cannot be empty");
+            return;
+        }
+        player.adjustInv(item, qty);
+        refreshInventory();
+    }
+
     private void saveGame(File file) {
         AES aes = new AES();
         aes.setKey("4psJTBdj4WTtPxVDpHDZGd2nHWdL");
@@ -1183,6 +1362,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel debugPanel;
     private javax.swing.JEditorPane htmlEditor;
     private javax.swing.JPanel htmlPanel;
     private javax.swing.JScrollPane htmlScroll;
@@ -1190,8 +1370,17 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JPanel invPanel;
     private javax.swing.JScrollPane invScroll;
     private javax.swing.JTextArea invText;
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JButton loadGameButton;
     private javax.swing.JPanel mainMenu;
     private javax.swing.JPanel mainPanel;
