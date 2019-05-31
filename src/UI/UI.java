@@ -252,15 +252,15 @@ public class UI extends javax.swing.JFrame {
                 try {
                     if (!statNames[i].equals("Health")) {
                         statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
-                    } else {
-                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));
+                    }else{
+                     statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));   
                     }
                 } catch (NumberFormatException ex) {
                     error("Stat Loading Error", ex.getMessage());
                     System.exit(-8);
                 }
             }
-
+            
             player = new Player(name, statArray);
             refreshStats();
             refreshInventory();
@@ -974,7 +974,7 @@ public class UI extends javax.swing.JFrame {
         initTextArea();
     }//GEN-LAST:event_htmlPanelComponentResized
     private String formatText(String text) {
-        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName())) + "</p>";
+        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName()).replace("<n>","<br>")) + "</p>";
     }
 
     private String formatColor(String text) {
