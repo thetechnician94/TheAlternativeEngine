@@ -130,6 +130,8 @@ public class UI extends javax.swing.JFrame {
 
         }
         titleLabel.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+        currStage=null;
+        updateText("");
     }
 
     private void initWeapons(String dir) {
