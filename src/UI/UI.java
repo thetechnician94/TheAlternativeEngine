@@ -115,7 +115,6 @@ public class UI extends javax.swing.JFrame {
         initTextArea();
         initColor();
         initWeapons(dir);
-        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
         this.setTitle(set.getValue("GameName"));
         startGameButton.setEnabled(true);
         saveGameButton.setEnabled(true);
@@ -130,6 +129,7 @@ public class UI extends javax.swing.JFrame {
             }
 
         }
+        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
     }
 
     private void initWeapons(String dir) {
@@ -137,11 +137,15 @@ public class UI extends javax.swing.JFrame {
     }
 
     private String formatTitle(String text) {
-        int height = jScrollPane2.getHeight() - (jScrollPane2.getHeight() / 2);
+        int height = tabPanel.getHeight();
+        int width = tabPanel.getWidth();
+        mainMenu.setSize(width, height);
+        height -= tabPanel.getHeight() / 2;
+        // titlePane.setSize(width, height); 
         if (set == null) {
-            return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue("255,255,255") + ";font-size:" + 36 + "px; font-family:" + "Arial" + "'>" + "The Alternative Engine 1.0" + "</p></td></tr></table>";
+            return "<table border='0'><tr><td width='" + width + " px' height='" + height + " px'  valign='middle'><p style='text-align:center;color: " + hexValue("255,255,255") + ";font-size:" + 36 + "px; font-family:" + "Arial" + "'>" + "The Alternative Engine 1.0" + "</p></td></tr></table>";
         }
-        return "<table width='100%' border='0'><tr><td height='" + height + "px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p></td></tr></table>";
+        return "<table border='0'><tr><td width='" + width + " px' height='" + height + " px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p></td></tr></table>";
     }
 
     private void initSettings(String dir) throws FileNotFoundException, IOException {
@@ -594,8 +598,8 @@ public class UI extends javax.swing.JFrame {
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(importGameButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveGameButton)
@@ -1129,8 +1133,14 @@ public class UI extends javax.swing.JFrame {
     }
     private void htmlEditorHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_htmlEditorHyperlinkUpdate
         if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            System.out.println("HE Activated " + evt.getDescription());
             new Thread(new UpdateThread(evt.getDescription())).start();
+            return;
         }
+        if (evt.getEventType() == HyperlinkEvent.EventType.ENTERED || evt.getEventType() == HyperlinkEvent.EventType.EXITED) {
+            return;
+        }
+        System.out.println("HE Not Activated " + evt.getDescription());
     }//GEN-LAST:event_htmlEditorHyperlinkUpdate
 
     private void startGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startGameButtonActionPerformed
