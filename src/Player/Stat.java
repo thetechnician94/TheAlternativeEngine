@@ -49,8 +49,8 @@ public class Stat implements Comparable{
         if (this.value < 0) {
             this.setValue(0);
         }
-        if (this.value > maxValue) {
-            this.setValue(maxValue);
+        if (this.value > getMaxValue()) {
+            this.setValue(getMaxValue());
         }
 
     }
@@ -59,6 +59,13 @@ public class Stat implements Comparable{
     public int compareTo(Object cmp) {
         Stat stat = (Stat) cmp;
         return this.name.compareTo(stat.getName());
+    }
+
+    /**
+     * @return the maxValue
+     */
+    public int getMaxValue() {
+        return maxValue;
     }
 
 }
