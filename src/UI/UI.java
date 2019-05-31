@@ -130,7 +130,7 @@ public class UI extends javax.swing.JFrame {
 
         }
         titleLabel.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
-        currStage=null;
+        currStage = null;
         updateText("");
     }
 
@@ -241,7 +241,7 @@ public class UI extends javax.swing.JFrame {
             Setting stats = new Setting(new File(gameDir + "/" + set.getValue("StatFile")));
             if (Boolean.parseBoolean(set.getValue("UseHealth"))) {
                 if (stats.addKey("Health")) {
-                    stats.updateValue("Health", "100");
+                    stats.updateValue("Health", set.getValue("MaxHealth"));
                     stats.writeChanges();
                 }
             }
@@ -250,12 +250,17 @@ public class UI extends javax.swing.JFrame {
             ArrayList<Stat> statArray = new ArrayList();
             for (int i = 0; i < statNames.length; i++) {
                 try {
-                    statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
+                    if (!statNames[i].equals("Health")) {
+                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
+                    } else {
+                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));
+                    }
                 } catch (NumberFormatException ex) {
                     error("Stat Loading Error", ex.getMessage());
                     System.exit(-8);
                 }
             }
+
             player = new Player(name, statArray);
             refreshStats();
             refreshInventory();
@@ -1136,7 +1141,7 @@ public class UI extends javax.swing.JFrame {
         initPlayer(name);
         initTabs();
         gotoStage(1);
-        
+
     }//GEN-LAST:event_startGameButtonActionPerformed
 
     private void loadGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameButtonActionPerformed
