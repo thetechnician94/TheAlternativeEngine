@@ -55,7 +55,7 @@ public class UI extends javax.swing.JFrame {
         initColorDefaults();
         htmlPanel.add(htmlScroll);
         tabPanel.addTab("Menu", mainMenu);
-        titlePane.setText("<h1>" + "The Alternative Engine 1.0" + "</h1>");
+        titleLabel.setText("<h1>" + "The Alternative Engine 1.0" + "</h1>");
         this.setTitle("The Alternative Engine 1.0");
         initGameSettings();
         if (!gameSettings.getValue("DefaultGame").equals("None")) {
@@ -129,7 +129,7 @@ public class UI extends javax.swing.JFrame {
             }
 
         }
-        titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+        titleLabel.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
     }
 
     private void initWeapons(String dir) {
@@ -137,15 +137,10 @@ public class UI extends javax.swing.JFrame {
     }
 
     private String formatTitle(String text) {
-        int height = tabPanel.getHeight();
-        int width = tabPanel.getWidth();
-        mainMenu.setSize(width, height);
-        height -= tabPanel.getHeight() / 2;
-        // titlePane.setSize(width, height); 
         if (set == null) {
-            return "<table border='0'><tr><td width='" + width + " px' height='" + height + " px'  valign='middle'><p style='text-align:center;color: " + hexValue("255,255,255") + ";font-size:" + 36 + "px; font-family:" + "Arial" + "'>" + "The Alternative Engine 1.0" + "</p></td></tr></table>";
+            return "<p style='text-align:center;color: " + hexValue("255,255,255") + ";font-size:" + 36 + "px; font-family:" + "Arial" + "'>" + "The Alternative Engine 1.0" + "</p>";
         }
-        return "<table border='0'><tr><td width='" + width + " px' height='" + height + " px'  valign='middle'><p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p></td></tr></table>";
+        return "<p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p>";
     }
 
     private void initSettings(String dir) throws FileNotFoundException, IOException {
@@ -344,9 +339,9 @@ public class UI extends javax.swing.JFrame {
         statText.setBackground(getColor(set.getValue("WindowBackground")));
         invText.setForeground(getColor(set.getValue("TextColor")));
         invText.setBackground(getColor(set.getValue("WindowBackground")));
-        titlePane.setBackground(getColor(set.getValue("WindowBackground")));
-        titlePane.setForeground(getColor(set.getValue("TextColor")));
-        titlePane.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(set.getValue("TextSize"))));
+        titleLabel.setBackground(getColor(set.getValue("WindowBackground")));
+        titleLabel.setForeground(getColor(set.getValue("TextColor")));
+        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(set.getValue("TextSize"))));
         tabPanel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         statText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
         invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
@@ -381,9 +376,9 @@ public class UI extends javax.swing.JFrame {
         statText.setBackground(Color.BLACK);
         invText.setForeground(Color.WHITE);
         invText.setBackground(Color.BLACK);
-        titlePane.setBackground(Color.BLACK);
-        titlePane.setForeground(Color.WHITE);
-        titlePane.setFont(new Font("Courier New", Font.BOLD, 16));
+        titleLabel.setBackground(Color.BLACK);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Courier New", Font.BOLD, 16));
         tabPanel.setFont(new Font("Courier New", Font.BOLD, 24));
         statText.setFont(new Font("Courier New", Font.BOLD, 24));
         invText.setFont(new Font("Courier New", Font.BOLD, 24));
@@ -438,8 +433,7 @@ public class UI extends javax.swing.JFrame {
         saveGameButton = new javax.swing.JButton();
         loadGameButton = new javax.swing.JButton();
         importGameButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        titlePane = new javax.swing.JEditorPane();
+        titleLabel = new javax.swing.JLabel();
         jFileChooser1 = new javax.swing.JFileChooser();
         debugPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -554,22 +548,7 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane2.addHierarchyBoundsListener(new java.awt.event.HierarchyBoundsListener() {
-            public void ancestorMoved(java.awt.event.HierarchyEvent evt) {
-            }
-            public void ancestorResized(java.awt.event.HierarchyEvent evt) {
-                jScrollPane2AncestorResized(evt);
-            }
-        });
-
-        titlePane.setEditable(false);
-        titlePane.setBorder(null);
-        titlePane.setContentType("text/html"); // NOI18N
-        titlePane.setText("");
-        jScrollPane2.setViewportView(titlePane);
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
         mainMenu.setLayout(mainMenuLayout);
@@ -578,7 +557,7 @@ public class UI extends javax.swing.JFrame {
             .addGroup(mainMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(startGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(mainMenuLayout.createSequentialGroup()
                         .addComponent(saveGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -599,7 +578,7 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(jCheckBox1)
                     .addComponent(importGameButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveGameButton)
@@ -712,6 +691,7 @@ public class UI extends javax.swing.JFrame {
         mainPanel.setForeground(new java.awt.Color(255, 255, 255));
 
         tabPanel.setBackground(new java.awt.Color(0, 0, 0));
+        tabPanel.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabPanel.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
 
         htmlPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -1275,18 +1255,6 @@ public class UI extends javax.swing.JFrame {
         }
         drawStage();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jScrollPane2AncestorResized(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jScrollPane2AncestorResized
-        if (titlePane == null) {
-            return;
-        }
-        if (set != null) {
-            titlePane.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
-        } else {
-            titlePane.setText("<html><h1>" + formatTitle("The Alternative Engine 1.0") + "</h1></html>");
-        }
-
-    }//GEN-LAST:event_jScrollPane2AncestorResized
     private void updateDebugInfo() {
         jTextField1.setText(currStage.getId() + "");
     }
@@ -1478,7 +1446,6 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -1493,6 +1460,6 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JScrollPane statScroll;
     private javax.swing.JTextArea statText;
     private javax.swing.JTabbedPane tabPanel;
-    private javax.swing.JEditorPane titlePane;
+    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }
