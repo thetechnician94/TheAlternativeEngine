@@ -24,9 +24,9 @@ public class StageManager {
 
     public StageManager(File stageFile, String delimiter, int max) throws FileNotFoundException, NumberFormatException, NoSuchElementException, DuplicateStageException {
         this.delimiter = delimiter;
-         this.maxLog = max;
+        this.maxLog = max;
         loadStages(stageFile);
-       
+
     }
 
     private void loadStages(File stageFile) throws FileNotFoundException, NumberFormatException, NoSuchElementException, DuplicateStageException {
@@ -187,7 +187,7 @@ public class StageManager {
                     if (options.length < 3) {
                         throw new NoSuchElementException("Required stat missing arguments for input " + next);
                     }
-                    reqStat.add(options[1]);
+                    reqStat.add(titleCase(options[1]));
                     try {
                         reqStatAmt.add(Integer.parseInt(options[2]));
                     } catch (NumberFormatException e) {
@@ -198,7 +198,7 @@ public class StageManager {
                     if (options.length < 3) {
                         throw new NoSuchElementException("Stat mod missing arguments for input " + next);
                     }
-                    statMod.add(options[1]);
+                    statMod.add(titleCase(options[1]));
                     try {
                         statModAmt.add(Integer.parseInt(options[2]));
                     } catch (NumberFormatException e) {
@@ -209,7 +209,7 @@ public class StageManager {
                     if (options.length < 3) {
                         throw new NoSuchElementException("Required item missing arguments for input " + next);
                     }
-                    reqItem.add(options[1]);
+                    reqItem.add(titleCase(options[1]));
                     try {
                         reqItemAmt.add(Integer.parseInt(options[2]));
                     } catch (NumberFormatException e) {
@@ -220,7 +220,7 @@ public class StageManager {
                     if (options.length < 3) {
                         throw new NoSuchElementException("Item mod missing arguments for input " + next);
                     }
-                    itemMod.add(options[1]);
+                    itemMod.add(titleCase(options[1]));
                     try {
                         itemModAmt.add(Integer.parseInt(options[2]));
                     } catch (NumberFormatException e) {
@@ -256,5 +256,28 @@ public class StageManager {
             ret[i] = iterator.next().intValue();
         }
         return ret;
+    }
+
+    private String titleCase(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        StringBuilder converted = new StringBuilder();
+
+        boolean convertNext = true;
+        for (char ch : text.toCharArray()) {
+            if (Character.isSpaceChar(ch)) {
+                convertNext = true;
+            } else if (convertNext) {
+                ch = Character.toTitleCase(ch);
+                convertNext = false;
+            } else {
+                ch = Character.toLowerCase(ch);
+            }
+            converted.append(ch);
+        }
+
+        return converted.toString();
     }
 }
