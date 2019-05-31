@@ -1105,7 +1105,7 @@ public class UI extends javax.swing.JFrame {
         dmg = dmgHandicap + (int) Math.ceil((double) damagePercent * (double) dmg);
         if (hitStat > rand) {
             currStage.getCombat().attackEnemy(dmg);
-            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage. Enemy Health: "+currStage.getCombat().getEnemyHealth()+"/"+currStage.getCombat().getMaxEnemyHealth());
+            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage. Enemy Health: " + currStage.getCombat().getEnemyHealth() + "/" + currStage.getCombat().getMaxEnemyHealth());
         } else {
             currStage.getCombat().addToLog("Your attack misses");
         }
@@ -1276,7 +1276,11 @@ public class UI extends javax.swing.JFrame {
             error("Bad value", "Item cannot be empty");
             return;
         }
-        player.adjustStat(stat, amt, Integer.parseInt(set.getValue("MaxStat")));
+        if (stat.equals("Health")) {
+            player.adjustStat(stat, amt, Integer.parseInt(set.getValue("MaxHealth")));
+        } else {
+            player.adjustStat(stat, amt, Integer.parseInt(set.getValue("MaxStat")));
+        }
         refreshStats();
     }
 

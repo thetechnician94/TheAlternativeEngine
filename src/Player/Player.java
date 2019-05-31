@@ -53,11 +53,14 @@ public class Player {
                 return;
             }
         }
-        if (adjustment >= 0) {
-            stats.add(new Stat(name, adjustment, max));
-        } else {
-            stats.add(new Stat(name, 0, max));
+        stats.add(new Stat(name, 0, max));
+        for (Stat stat : stats) {
+            if (stat.getName().equals(name)) {
+                stat.adjustStat(adjustment);
+                return;
+            }
         }
+
     }
 
     public int getItem(String name) {

@@ -145,8 +145,11 @@ public class Combat {
      */
     public String getCombatLog() {
         String out = "";
-        for (int i = combatLog.size()-1; i >= 0; i--) {
+        for (int i = combatLog.size() - 1; i >= 0; i--) {
             out += combatLog.get(i);
+            if (i % 2 == 0) {
+                out += "---------------<br>";
+            }
         }
         return out;
     }
