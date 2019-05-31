@@ -51,16 +51,16 @@ public class Combat {
     public void addToLog(String entry) {
         if (this.combatLog.size() == maxLog) {
             combatLog.remove(combatLog.get(0));
-            combatLog.add(entry + ". Enemy Health: " + enemyHealth + "/" + maxEnemyHealth + "<br>");
+            combatLog.add(entry + "<br>");
         } else {
-            combatLog.add(entry + ". Enemy Health: " + enemyHealth + "/" + maxEnemyHealth + "<br>");
+            combatLog.add(entry + "<br>");
         }
 
     }
 
     public void resetCombat() {
         combatLog.clear();
-        this.enemyHealth = maxEnemyHealth;
+        this.enemyHealth = getMaxEnemyHealth();
     }
 
     public int enemyAttacks() {
@@ -149,5 +149,12 @@ public class Combat {
             out += combatLog.get(i);
         }
         return out;
+    }
+
+    /**
+     * @return the maxEnemyHealth
+     */
+    public int getMaxEnemyHealth() {
+        return maxEnemyHealth;
     }
 }

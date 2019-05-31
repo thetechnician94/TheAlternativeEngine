@@ -252,15 +252,15 @@ public class UI extends javax.swing.JFrame {
                 try {
                     if (!statNames[i].equals("Health")) {
                         statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
-                    }else{
-                     statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));   
+                    } else {
+                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));
                     }
                 } catch (NumberFormatException ex) {
                     error("Stat Loading Error", ex.getMessage());
                     System.exit(-8);
                 }
             }
-            
+
             player = new Player(name, statArray);
             refreshStats();
             refreshInventory();
@@ -974,7 +974,7 @@ public class UI extends javax.swing.JFrame {
         initTextArea();
     }//GEN-LAST:event_htmlPanelComponentResized
     private String formatText(String text) {
-        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName()).replace("<n>","<br>")) + "</p>";
+        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName()).replace("<n>", "<br>")) + "</p>";
     }
 
     private String formatColor(String text) {
@@ -1086,7 +1086,7 @@ public class UI extends javax.swing.JFrame {
         int enemyDamage = currStage.getCombat().enemyAttacks();
         player.adjustStat("Health", enemyDamage * -1, Integer.parseInt(set.getValue("MaxStat")));
         if (enemyDamage > 0) {
-            currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " attacks you for " + enemyDamage + " damage");
+            currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " attacks you for " + enemyDamage + " damage. Your health: " + player.getStat("Health") + "/" + set.getValue("MaxHealth"));
         } else {
             currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " misses its attack");
         }
@@ -1105,7 +1105,7 @@ public class UI extends javax.swing.JFrame {
         dmg = dmgHandicap + (int) Math.ceil((double) damagePercent * (double) dmg);
         if (hitStat > rand) {
             currStage.getCombat().attackEnemy(dmg);
-            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage");
+            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage. Enemy Health: "+currStage.getCombat().getEnemyHealth()+"/"+currStage.getCombat().getMaxEnemyHealth());
         } else {
             currStage.getCombat().addToLog("Your attack misses");
         }
