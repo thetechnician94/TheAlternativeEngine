@@ -9,7 +9,7 @@ package Player;
  *
  * @author 94tyl
  */
-public class Stat {
+public class Stat implements Comparable{
 
     private String name;
     private int value;
@@ -53,6 +53,12 @@ public class Stat {
             this.setValue(maxValue);
         }
 
+    }
+
+    @Override
+    public int compareTo(Object cmp) {
+        Stat stat = (Stat) cmp;
+        return this.name.compareTo(stat.getName());
     }
 
 }

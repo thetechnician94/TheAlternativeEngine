@@ -9,7 +9,7 @@ package Player;
  *
  * @author 94tyl
  */
-public class Item {
+public class Item implements Comparable {
 
     /**
      * @param qty the qty to set
@@ -30,7 +30,7 @@ public class Item {
         if (this.qty >= 0) {
             setQty(qty + adjustment);
         }
-        if(qty<0){
+        if (qty < 0) {
             setQty(0);
         }
     }
@@ -47,6 +47,12 @@ public class Item {
      */
     public int getQty() {
         return qty;
+    }
+
+    @Override
+    public int compareTo(Object cmp) {
+        Item item = (Item) cmp;
+        return this.name.compareTo(item.getName());
     }
 
 }

@@ -1113,14 +1113,9 @@ public class UI extends javax.swing.JFrame {
     }
     private void htmlEditorHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_htmlEditorHyperlinkUpdate
         if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-            System.out.println("HE Activated " + evt.getDescription());
             new Thread(new UpdateThread(evt.getDescription())).start();
             return;
         }
-        if (evt.getEventType() == HyperlinkEvent.EventType.ENTERED || evt.getEventType() == HyperlinkEvent.EventType.EXITED) {
-            return;
-        }
-        System.out.println("HE Not Activated " + evt.getDescription());
     }//GEN-LAST:event_htmlEditorHyperlinkUpdate
 
     private void startGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startGameButtonActionPerformed
@@ -1139,6 +1134,7 @@ public class UI extends javax.swing.JFrame {
         initPlayer(name);
         initTabs();
         gotoStage(1);
+        
     }//GEN-LAST:event_startGameButtonActionPerformed
 
     private void loadGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameButtonActionPerformed
