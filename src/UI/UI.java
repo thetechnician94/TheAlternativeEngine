@@ -55,7 +55,7 @@ public class UI extends javax.swing.JFrame {
         initColorDefaults();
         htmlPanel.add(htmlScroll);
         tabPanel.addTab("Menu", mainMenu);
-        titleLabel.setText("<h1>" + "The Alternative Engine 1.0" + "</h1>");
+        titleLabel.setText("The Alternative Engine 1.0");
         this.setTitle("The Alternative Engine 1.0");
         initGameSettings();
         if (!gameSettings.getValue("DefaultGame").equals("None")) {
@@ -1368,7 +1368,6 @@ public class UI extends javax.swing.JFrame {
                 }
             } else {
                 stage = Integer.parseInt(line);
-
             }
         }
         initTabs();
