@@ -754,6 +754,8 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        settingFrame.setTitle("Settings");
+
         jToggleButton1.setSelected(true);
         jToggleButton1.setText("On");
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {

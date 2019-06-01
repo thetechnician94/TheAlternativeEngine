@@ -345,6 +345,9 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JFrame" name="settingFrame">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="Settings"/>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
