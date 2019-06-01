@@ -895,6 +895,7 @@ public class UI extends javax.swing.JFrame {
                 setCombatStageText(true, playerDead, enemyDead);
             }
         }
+        //htmlEditor.setCaretPosition(htmlEditor.getText().length());
         refreshStats();
         refreshInventory();
     }
@@ -1113,6 +1114,12 @@ public class UI extends javax.swing.JFrame {
             player.adjustInv(weapon.getReqItem(), weapon.getReqItemAmt() * -1);
         }
         if (currStage.getCombat().getEnemyHealth() > 0) {
+            drawCombatStage();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             attackPlayer();
         }
         refreshStats();
@@ -1306,7 +1313,7 @@ public class UI extends javax.swing.JFrame {
         AES aes = new AES();
         aes.setKey("4psJTBdj4WTtPxVDpHDZGd2nHWdL");
         String inv = player.getInventory();
-        String stats = player.getStats();
+        String stats = player.getStatsSave();
         String stage = currStage.getId() + "";
         PrintStream printer = null;
         try {
@@ -1354,7 +1361,11 @@ public class UI extends javax.swing.JFrame {
                 }
             } else if (step == 2) {
                 String[] parse = line.split(":");
-                player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxStat")));
+                if (parse[0].equals("Health")) {
+                    player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxHealth")));
+                }else{
+                    player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxStat")));
+                }
             } else {
                 stage = Integer.parseInt(line);
 

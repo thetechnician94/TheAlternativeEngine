@@ -46,6 +46,15 @@ public class Player {
         return out;
     }
 
+    public String getStatsSave() {
+        Collections.sort(stats);
+        String out = "";
+        for (Stat stat : stats) {
+            out += stat.getName() + ": " + stat.getValue() + "\n";
+        }
+        return out;
+    }
+
     public void adjustStat(String name, int adjustment, int max) {
         for (Stat stat : stats) {
             if (stat.getName().equals(name)) {
