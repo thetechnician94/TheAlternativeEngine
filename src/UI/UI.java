@@ -33,6 +33,7 @@ import java.util.Scanner;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -62,6 +63,7 @@ public class UI extends javax.swing.JFrame {
             importGame(gameSettings.getValue("DefaultGame"));
             gameDir = gameSettings.getValue("DefaultGame");
         }
+        initSettingsFrame();
     }
 
     private void initGameSettings() {
@@ -74,6 +76,15 @@ public class UI extends javax.swing.JFrame {
             if (gameSettings.addKey("DefaultGame")) {
                 gameSettings.updateValue("DefaultGame", "None");
             }
+            if (gameSettings.addKey("User-Font")) {
+                gameSettings.updateValue("User-Font", "14");
+            }
+            if (gameSettings.addKey("TabLocation")) {
+                gameSettings.updateValue("TabLocation", "3");
+            }
+            if (gameSettings.addKey("Music")) {
+                gameSettings.updateValue("Music", "TRUE");
+            }
             gameSettings.writeChanges();
         } catch (IOException ex) {
             error("Critical Error", ex.getMessage());
@@ -82,6 +93,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void importGame(String dir) {
+
         try {
             initSettings(dir);
         } catch (IOException ex) {
@@ -145,6 +157,28 @@ public class UI extends javax.swing.JFrame {
         return "<p style='text-align:center;color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + Integer.parseInt(set.getValue("TitleSize")) + "px; font-family:" + set.getValue("Font") + "'>" + text + "</p>";
     }
 
+    private void initSettingsFrame() {
+        jToggleButton1.setSelected(Boolean.getBoolean(gameSettings.getValue("Music")));
+        if (jToggleButton1.isSelected()) {
+            jToggleButton1.setText("On");
+        } else {
+            jToggleButton1.setText("Off");
+        }
+
+        if (gameSettings.getValue("User-Font") != null) {
+            jComboBox1.setSelectedItem(gameSettings.getValue("User-Font"));
+        } else {
+            try {
+                jComboBox1.setSelectedItem(gameSettings.getValue("User-Font"));
+                gameSettings.addKey("User-Font");
+                gameSettings.updateValue("User-Font", gameSettings.getValue("User-Font"));
+                gameSettings.writeChanges();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     private void initSettings(String dir) throws FileNotFoundException, IOException {
 
         set = new Setting(new File(dir + "/" + "Settings.txt"));
@@ -169,9 +203,6 @@ public class UI extends javax.swing.JFrame {
         }
         if (set.addKey("OptionColor")) {
             set.updateValue("OptionColor", "255,255,255");
-        }
-        if (set.addKey("TextSize")) {
-            set.updateValue("TextSize", "14");
         }
         if (set.addKey("TitleSize")) {
             set.updateValue("TitleSize", "24");
@@ -233,6 +264,9 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("FullyMetRequirementColor")) {
             set.updateValue("FullyMetRequirementColor", "0,255,0");
         }
+        if (gameSettings.getValue("User-Font") != null) {
+            set.updateValue("TextSize", gameSettings.getValue("User-Font"));
+        }
         set.writeChanges();
     }
 
@@ -271,7 +305,26 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void initTabs() {
-
+        if (gameSettings.getValue("TabLocation") != null) {
+            int location = Integer.parseInt(gameSettings.getValue("TabLocation"));
+            updateTabs(location);
+            switch (location) {
+                case 1:
+                    jRadioButton1.setSelected(true);
+                    break;
+                case 2:
+                    jRadioButton3.setSelected(true);
+                    break;
+                case 3:
+                    jRadioButton2.setSelected(true);
+                    break;
+                case 4:
+                    jRadioButton4.setSelected(true);
+                    break;
+                default:
+                    jRadioButton2.setSelected(true);
+            }
+        }
         if (Boolean.parseBoolean(set.getValue("UseInventory"))) {
             tabPanel.addTab("Inv", invPanel);
         }
@@ -348,12 +401,12 @@ public class UI extends javax.swing.JFrame {
         invText.setBackground(getColor(set.getValue("WindowBackground")));
         titleLabel.setBackground(getColor(set.getValue("WindowBackground")));
         titleLabel.setForeground(getColor(set.getValue("TextColor")));
-        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(set.getValue("TextSize"))));
-        tabPanel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
-        statText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
-        invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TextSize"))));
-        jCheckBox1.setBackground(getColor(set.getValue("WindowBackground")));
-        jCheckBox1.setForeground(getColor(set.getValue("TextColor")));
+        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(gameSettings.getValue("User-Font"))));
+        tabPanel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
+        statText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
+        invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
+        //  jToggleButton1.setBackground(getColor(set.getValue("WindowBackground")));
+        // jToggleButton1.setForeground(getColor(set.getValue("TextColor")));
         debugPanel.setBackground(getColor(set.getValue("WindowBackground")));
         debugPanel.setForeground(getColor(set.getValue("TextColor")));
         jLabel1.setFont(new Font(set.getValue("Font"), Font.BOLD, 14));
@@ -389,8 +442,8 @@ public class UI extends javax.swing.JFrame {
         tabPanel.setFont(new Font("Courier New", Font.BOLD, 24));
         statText.setFont(new Font("Courier New", Font.BOLD, 24));
         invText.setFont(new Font("Courier New", Font.BOLD, 24));
-        jCheckBox1.setBackground(Color.BLACK);
-        jCheckBox1.setForeground(Color.WHITE);
+        //   jToggleButton1.setBackground(Color.BLACK);
+        //  jToggleButton1.setForeground(Color.WHITE);
         debugPanel.setBackground(Color.BLACK);
         debugPanel.setForeground(Color.WHITE);
         jLabel1.setFont(new Font("Courier New", Font.BOLD, 14));
@@ -435,12 +488,12 @@ public class UI extends javax.swing.JFrame {
         invScroll = new javax.swing.JScrollPane();
         invText = new javax.swing.JTextArea();
         mainMenu = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
         startGameButton = new javax.swing.JButton();
         saveGameButton = new javax.swing.JButton();
         loadGameButton = new javax.swing.JButton();
         importGameButton = new javax.swing.JButton();
         titleLabel = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jFileChooser1 = new javax.swing.JFileChooser();
         debugPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -452,6 +505,18 @@ public class UI extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        settingFrame = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         tabPanel = new javax.swing.JTabbedPane();
         htmlPanel = new javax.swing.JPanel();
@@ -517,13 +582,6 @@ public class UI extends javax.swing.JFrame {
 
         mainMenu.setPreferredSize(new java.awt.Dimension(285, 591));
 
-        jCheckBox1.setText("Mute Music");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-
         startGameButton.setText("New Game");
         startGameButton.setEnabled(false);
         startGameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -557,6 +615,13 @@ public class UI extends javax.swing.JFrame {
 
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        jButton2.setText("Settings");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
         mainMenu.setLayout(mainMenuLayout);
         mainMenuLayout.setHorizontalGroup(
@@ -571,19 +636,21 @@ public class UI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(loadGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(mainMenuLayout.createSequentialGroup()
-                        .addComponent(importGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox1)
-                        .addGap(0, 9, Short.MAX_VALUE)))
+                        .addComponent(importGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
+
+        mainMenuLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {importGameButton, jButton2});
+
         mainMenuLayout.setVerticalGroup(
             mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(importGameButton))
+                    .addComponent(importGameButton)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -687,6 +754,120 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jToggleButton1.setSelected(true);
+        jToggleButton1.setText("On");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Music:");
+
+        jLabel5.setText("Text Size:");
+
+        jComboBox1.setEditable(true);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "8", "12", "14", "16", "18", "20", "22", "24", "26", "28", "32" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Tabs Location: ");
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("Top");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setSelected(true);
+        jRadioButton2.setText("Bottom");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setText("Left");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setText("Right");
+        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGap(98, 98, 98)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton4)))
+                .addContainerGap(149, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jToggleButton1)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jRadioButton3)
+                    .addComponent(jRadioButton4))
+                .addContainerGap(367, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout settingFrameLayout = new javax.swing.GroupLayout(settingFrame.getContentPane());
+        settingFrame.getContentPane().setLayout(settingFrameLayout);
+        settingFrameLayout.setHorizontalGroup(
+            settingFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        settingFrameLayout.setVerticalGroup(
+            settingFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -698,7 +879,6 @@ public class UI extends javax.swing.JFrame {
         mainPanel.setForeground(new java.awt.Color(255, 255, 255));
 
         tabPanel.setBackground(new java.awt.Color(0, 0, 0));
-        tabPanel.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabPanel.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
 
         htmlPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -711,7 +891,7 @@ public class UI extends javax.swing.JFrame {
         htmlPanel.setLayout(htmlPanelLayout);
         htmlPanelLayout.setHorizontalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addGap(0, 598, Short.MAX_VALUE)
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -725,7 +905,7 @@ public class UI extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(htmlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tabPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -902,14 +1082,14 @@ public class UI extends javax.swing.JFrame {
 
     private String formatCombatLog() {
         return "<p style='color: " + hexValue(set.getValue("TextColor"))
-                + "; font-size: " + set.getValue("TextSize")
+                + "; font-size: " + gameSettings.getValue("User-Font")
                 + "px; font-family: " + set.getValue("Font") + "'>"
                 + currStage.getCombat().getCombatLog() + "</p>";
     }
 
     private String formatCombatOptions() {
         String html = "<ul style='color: " + hexValue(set.getValue("TextColor"))
-                + "; font-size: " + set.getValue("TextSize")
+                + "; font-size: " + gameSettings.getValue("User-Font")
                 + "px; font-family: " + set.getValue("Font") + "'>";
         for (Weapon weapon : weapons.getWeapons()) {
             if (player.getItem(weapon.getName()) > 0) {
@@ -917,7 +1097,7 @@ public class UI extends javax.swing.JFrame {
                     if (player.getItem(weapon.getReqItem()) >= weapon.getReqItemAmt()) {
                         html += "<li><a style='color: "
                                 + hexValue(set.getValue("TextColor"))
-                                + "; text-decoration:none; font-size: " + set.getValue("TextSize")
+                                + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                                 + "px; font-family: " + set.getValue("Font")
                                 + "' href='c," + weapon.getName() + "'>"
                                 + formatColor("<c " + hexValue(set.getValue("FullyMetRequirementColor"))
@@ -928,7 +1108,7 @@ public class UI extends javax.swing.JFrame {
                     } else {
                         html += "<li><span style='color: "
                                 + hexValue(set.getValue("UnusableOptionColor"))
-                                + "; text-decoration:none; font-size: " + set.getValue("TextSize")
+                                + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                                 + "px; font-family: " + set.getValue("Font") + "'>"
                                 + formatColor("<c " + hexValue(set.getValue("UnmetRequirementColor"))
                                         + ">[" + weapon.getReqItem()
@@ -939,7 +1119,7 @@ public class UI extends javax.swing.JFrame {
                 } else {
                     html += "<li><a style='color: "
                             + hexValue(set.getValue("TextColor"))
-                            + "; text-decoration:none; font-size: " + set.getValue("TextSize")
+                            + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                             + "px; font-family: " + set.getValue("Font")
                             + "' href='c," + weapon.getName() + "'>Use " + weapon.getName() + "</a></li>";
                 }
@@ -949,7 +1129,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void playMusic() {
-        if (!currStage.getMusic().isEmpty() && !jCheckBox1.isSelected()) {
+        if (!currStage.getMusic().isEmpty() && jToggleButton1.isSelected()) {
             if (!new File(gameDir + "/" + currStage.getMusic()).exists()) {
                 error("FileNotFound", "Could not locate music file for stage " + currStage.getId());
                 return;
@@ -975,11 +1155,11 @@ public class UI extends javax.swing.JFrame {
         initTextArea();
     }//GEN-LAST:event_htmlPanelComponentResized
     private String formatText(String text) {
-        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName()).replace("<n>", "<br>")) + "</p>";
+        return "<p style='color: " + hexValue(set.getValue("TextColor")) + ";font-size:" + gameSettings.getValue("User-Font") + "px; font-family:" + set.getValue("Font") + "'>" + formatColor(text.replace("<PLAYERNAME>", player.getName()).replace("<n>", "<br>")) + "</p>";
     }
 
     private String formatColor(String text) {
-        text = text.replace("<c", "<span style='font-size:" + set.getValue("TextSize") + "px; font-family:" + set.getValue("Font") + ";color:");
+        text = text.replace("<c", "<span style='font-size:" + gameSettings.getValue("User-Font") + "px; font-family:" + set.getValue("Font") + ";color:");
         text = text.replace("</c>", "</span>");
         text = text.replace(">", "'>");
         text = text.replace("</span'>", "</span>");
@@ -988,7 +1168,7 @@ public class UI extends javax.swing.JFrame {
 
     private String formatOptions(ArrayList<Option> options) {
         String html = "<ul style='color: " + hexValue(set.getValue("OptionColor"))
-                + "; font-size: " + set.getValue("TextSize")
+                + "; font-size: " + gameSettings.getValue("User-Font")
                 + "px; font-family: " + set.getValue("Font") + "'>";
         boolean showOption = Boolean.parseBoolean(set.getValue("ShowOptionsWhereReqsAreNotMet"));
         for (Option option : options) {
@@ -997,7 +1177,7 @@ public class UI extends javax.swing.JFrame {
             if (reqsMet) {
                 html += "<li><a style='color: "
                         + hexValue(set.getValue("OptionColor"))
-                        + "; text-decoration:none; font-size: " + set.getValue("TextSize")
+                        + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                         + "px; font-family: " + set.getValue("Font")
                         + "' href='" + option.getId() + "," + option.getNextStage()
                         + "'>" + req + formatColor(option.getText())
@@ -1005,7 +1185,7 @@ public class UI extends javax.swing.JFrame {
             } else if (showOption) {
                 html += "<li><span style='color: "
                         + hexValue(set.getValue("UnusableOptionColor"))
-                        + "; text-decoration:none; font-size: " + set.getValue("TextSize")
+                        + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                         + "px; font-family: " + set.getValue("Font")
                         + "'>" + req + formatColor(option.getText())
                         + "</a></li>";
@@ -1165,27 +1345,6 @@ public class UI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loadGameButtonActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        if (audioPlayer == null) {
-            return;
-        }
-        if (jCheckBox1.isSelected()) {
-            try {
-                audioPlayer.stop();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                Logger.getLogger(UI.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                audioPlayer.resetAudioStream();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                Logger.getLogger(UI.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
     private void importGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importGameButtonActionPerformed
         if (player != null) {
             if (!confirm("Restarting game", "Are you sure you want to import a game? Any unsaved progress will be lost")) {
@@ -1265,6 +1424,107 @@ public class UI extends javax.swing.JFrame {
         }
         drawStage();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        if (jToggleButton1.isSelected()) {
+            jToggleButton1.setText("On");
+
+        } else {
+            jToggleButton1.setText("Off");
+        }
+        try {
+            gameSettings.updateValue("Music", jToggleButton1.isSelected() + "");
+            gameSettings.writeChanges();
+        } catch (FileNotFoundException ex) {
+            error("FileNotFoundException", "Couldn't write settings\n" + ex.getMessage());
+        }
+        if (audioPlayer == null) {
+            if (currStage == null || currStage.getMusic().isEmpty()) {
+                return;
+            }
+            try {
+                audioPlayer = new SimpleAudioPlayer(gameDir + "/" + currStage.getMusic());
+            } catch (LineUnavailableException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedAudioFileException ex) {
+                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (jToggleButton1.isSelected()) {
+            if (!audioPlayer.status.equals("play")) {
+                playMusic();
+            }
+            try {
+                audioPlayer.resetAudioStream();
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                Logger.getLogger(UI.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                audioPlayer.stop();
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                Logger.getLogger(UI.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        settingFrame.pack();
+        settingFrame.setLocationRelativeTo(null);
+        settingFrame.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        try {
+
+            if (set != null) {
+                initColor();
+            }
+            initTabs();
+            if (currStage != null) {
+                drawStage();
+            }
+            gameSettings.updateValue("User-Font", (String) jComboBox1.getSelectedItem());
+            gameSettings.writeChanges();
+        } catch (FileNotFoundException ex) {
+            error("FileNotFoundException", "Couldn't write settings\n" + ex.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        updateTabs(JTabbedPane.TOP);
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        updateTabs(JTabbedPane.BOTTOM);
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        updateTabs(JTabbedPane.LEFT);
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        updateTabs(JTabbedPane.RIGHT);
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+    private void updateTabs(int location) {
+        try {
+            tabPanel.setTabPlacement(location);
+            gameSettings.updateValue("TabLocation", location + "");
+            gameSettings.writeChanges();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void updateDebugInfo() {
         jTextField1.setText(currStage.getId() + "");
     }
@@ -1363,7 +1623,7 @@ public class UI extends javax.swing.JFrame {
                 String[] parse = line.split(":");
                 if (parse[0].equals("Health")) {
                     player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxHealth")));
-                }else{
+                } else {
                     player.setStat(parse[0], Integer.parseInt(parse[1].trim()), Integer.parseInt(set.getValue("MaxStat")));
                 }
             } else {
@@ -1449,6 +1709,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel debugPanel;
     private javax.swing.JEditorPane htmlEditor;
     private javax.swing.JPanel htmlPanel;
@@ -1458,20 +1719,31 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JScrollPane invScroll;
     private javax.swing.JTextArea invText;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JButton loadGameButton;
     private javax.swing.JPanel mainMenu;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton saveGameButton;
+    private javax.swing.JFrame settingFrame;
     private javax.swing.JButton startGameButton;
     private javax.swing.JPanel statPanel;
     private javax.swing.JScrollPane statScroll;
