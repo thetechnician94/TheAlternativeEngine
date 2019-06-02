@@ -101,7 +101,6 @@ public class UI extends javax.swing.JFrame {
     private void importGame(String dir) {
 
         try {
-
             try {
                 initSettings(dir);
             } catch (IOException ex) {
@@ -114,6 +113,9 @@ public class UI extends javax.swing.JFrame {
                     error("FileNotFoundException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
                     return;
                 }
+            }
+            if (gameSettings.getValue("DefaultGame").equals("None")) {
+                return;
             }
             try {
                 try {
@@ -322,16 +324,17 @@ public class UI extends javax.swing.JFrame {
                     jRadioButton2.setSelected(true);
             }
         }
-        if (Boolean.parseBoolean(set.getValue("UseInventory"))) {
-            tabPanel.addTab("Inv", invPanel);
+        if (set != null) {
+            if (Boolean.parseBoolean(set.getValue("UseInventory"))) {
+                tabPanel.addTab("Inv", invPanel);
+            }
+            if (Boolean.parseBoolean(set.getValue("UseStats"))) {
+                tabPanel.addTab("Stats", statPanel);
+            }
+            if (Boolean.parseBoolean(set.getValue("UseDebug"))) {
+                tabPanel.addTab("Debug", debugPanel);
+            }
         }
-        if (Boolean.parseBoolean(set.getValue("UseStats"))) {
-            tabPanel.addTab("Stats", statPanel);
-        }
-        if (Boolean.parseBoolean(set.getValue("UseDebug"))) {
-            tabPanel.addTab("Debug", debugPanel);
-        }
-
     }
 
     private void refreshStats() {
