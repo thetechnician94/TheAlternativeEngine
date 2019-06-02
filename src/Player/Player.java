@@ -34,13 +34,23 @@ public class Player {
     }
 
     public String getStats() {
+        for (Stat stat : stats) {
+            if (stat.getName().equals("Health")) {
+                stat.setName("@Health");
+            }
+        }
         Collections.sort(stats);
         String out = "";
         for (Stat stat : stats) {
-            if (stat.getName().equals("Health")) {
-                out += stat.getName() + ": " + stat.getValue() + "/" + stat.getMaxValue() + "\n";
+            if (stat.getName().equals("@Health")) {
+                out += stat.getName().replace("@", "") + ": " + stat.getValue() + "/" + stat.getMaxValue() + "\n";
             } else {
                 out += stat.getName() + ": " + stat.getValue() + "\n";
+            }
+        }
+        for (Stat stat : stats) {
+            if (stat.getName().equals("@Health")) {
+                stat.setName("Health");
             }
         }
         return out;

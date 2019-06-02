@@ -11,6 +11,13 @@ package Player;
  */
 public class Stat implements Comparable{
 
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private String name;
     private int value;
     private int maxValue;

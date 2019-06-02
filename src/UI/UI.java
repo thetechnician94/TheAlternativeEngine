@@ -335,11 +335,11 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void refreshStats() {
-        statText.setText(player.getName() + "\n" + player.getStats());
+        statText.setText(player.getName()+"'s Stats" + "\n\n" + player.getStats());
     }
 
     private void refreshInventory() {
-        invText.setText("Inventory\n" + player.getInventory());
+        invText.setText(player.getName()+"'s Inventory" + "\n\n" + player.getInventory());
     }
 
     private Color getColor(String colorString) {
