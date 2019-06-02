@@ -21,12 +21,11 @@ public class Combat {
     private int hitChance;
     private int deathStage;
     private int winStage;
-    private ArrayList<String> combatLog = new ArrayList();
     private int firstAttackChance;
     private int maxEnemyHealth;
-    private int maxLog;
 
-    public Combat(String name, int health, int damage, int damageRange, String type, int hitChance, int deathStage, int winStage, int firstAttack, int maxLog) {
+
+    public Combat(String name, int health, int damage, int damageRange, String type, int hitChance, int deathStage, int winStage, int firstAttack) {
         enemyName = name;
         enemyHealth = health;
         maxEnemyHealth = enemyHealth;
@@ -37,8 +36,6 @@ public class Combat {
         this.hitChance = hitChance;
         this.deathStage = deathStage;
         this.winStage = winStage;
-        this.maxLog = maxLog;
-
     }
 
     public void attackEnemy(int damage) {
@@ -48,18 +45,8 @@ public class Combat {
         }
     }
 
-    public void addToLog(String entry) {
-        if (this.combatLog.size() == maxLog) {
-            combatLog.remove(combatLog.get(0));
-            combatLog.add(entry + "<br>");
-        } else {
-            combatLog.add(entry + "<br>");
-        }
-
-    }
 
     public void resetCombat() {
-        combatLog.clear();
         this.enemyHealth = getMaxEnemyHealth();
     }
 
@@ -138,20 +125,6 @@ public class Combat {
      */
     public int getWinStage() {
         return winStage;
-    }
-
-    /**
-     * @return the combatLog
-     */
-    public String getCombatLog() {
-        String out = "";
-        for (int i = combatLog.size() - 1; i >= 0; i--) {
-            out += combatLog.get(i);
-            if (i % 2 == 0) {
-                out += "---------------<br>";
-            }
-        }
-        return out;
     }
 
     /**

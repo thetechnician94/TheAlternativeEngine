@@ -28,6 +28,8 @@ import javax.swing.event.HyperlinkEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -85,6 +87,9 @@ public class UI extends javax.swing.JFrame {
             if (gameSettings.addKey("Music")) {
                 gameSettings.updateValue("Music", "TRUE");
             }
+            if (gameSettings.addKey("ActivityLog")) {
+                gameSettings.updateValue("ActivityLog", "1");
+            }
             gameSettings.writeChanges();
         } catch (IOException ex) {
             error("Critical Error", ex.getMessage());
@@ -109,7 +114,7 @@ public class UI extends javax.swing.JFrame {
         }
         try {
             try {
-                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"), Integer.parseInt(set.getValue("MaxCombatLog")));
+                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
             } catch (NumberFormatException ex) {
                 error("Stage Loading Error", ex.getMessage());
                 return;
@@ -164,18 +169,9 @@ public class UI extends javax.swing.JFrame {
         } else {
             jToggleButton1.setText("Off");
         }
-
-        if (gameSettings.getValue("User-Font") != null) {
-            jComboBox1.setSelectedItem(gameSettings.getValue("User-Font"));
-        } else {
-            try {
-                jComboBox1.setSelectedItem(gameSettings.getValue("User-Font"));
-                gameSettings.addKey("User-Font");
-                gameSettings.updateValue("User-Font", gameSettings.getValue("User-Font"));
-                gameSettings.writeChanges();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        jComboBox1.setSelectedItem(gameSettings.getValue("User-Font"));
+        if (gameSettings.getValue("ActivityLog").equals("2")) {
+            jRadioButton6.setSelected(true);
         }
     }
 
@@ -381,6 +377,7 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void initColor() {
+        mainPanel.setBackground(getColor(set.getValue("WindowBackground")));
         htmlScroll.setBackground(getColor(set.getValue("WindowBackground")));
         htmlScroll.setForeground(getColor(set.getValue("TextColor")));
         htmlEditor.setForeground(getColor(set.getValue("TextColor")));
@@ -401,12 +398,10 @@ public class UI extends javax.swing.JFrame {
         invText.setBackground(getColor(set.getValue("WindowBackground")));
         titleLabel.setBackground(getColor(set.getValue("WindowBackground")));
         titleLabel.setForeground(getColor(set.getValue("TextColor")));
-        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, 16 + Integer.parseInt(gameSettings.getValue("User-Font"))));
+        titleLabel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(set.getValue("TitleSize"))));
         tabPanel.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
         statText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
         invText.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
-        //  jToggleButton1.setBackground(getColor(set.getValue("WindowBackground")));
-        // jToggleButton1.setForeground(getColor(set.getValue("TextColor")));
         debugPanel.setBackground(getColor(set.getValue("WindowBackground")));
         debugPanel.setForeground(getColor(set.getValue("TextColor")));
         jLabel1.setFont(new Font(set.getValue("Font"), Font.BOLD, 14));
@@ -415,9 +410,14 @@ public class UI extends javax.swing.JFrame {
         jLabel1.setForeground(getColor(set.getValue("TextColor")));
         jLabel2.setForeground(getColor(set.getValue("TextColor")));
         jLabel3.setForeground(getColor(set.getValue("TextColor")));
+        activityLog.setForeground(getColor(set.getValue("TextColor")));
+        activityLog.setBackground(getColor(set.getValue("WindowBackground")));
+        activityLog.setFont(new Font(set.getValue("Font"), Font.BOLD, Integer.parseInt(gameSettings.getValue("User-Font"))));
+
     }
 
     private void initColorDefaults() {
+        mainPanel.setBackground(Color.BLACK);
         htmlScroll.setBackground(Color.BLACK);
         htmlScroll.setForeground(Color.WHITE);
         htmlEditor.setForeground(Color.WHITE);
@@ -452,7 +452,26 @@ public class UI extends javax.swing.JFrame {
         jLabel1.setForeground(Color.WHITE);
         jLabel2.setForeground(Color.WHITE);
         jLabel3.setForeground(Color.WHITE);
+        activityLog.setForeground(Color.WHITE);
+        activityLog.setBackground(Color.BLACK);
 
+    }
+
+    private void updateActivityLog(String text) {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        text = "[" + sdf.format(date) + "] " + text;
+        if (gameSettings.getValue("ActivityLog").equals("1")) {
+            activityLog.setText(text + "\n" + activityLog.getText());
+            activityLog.setCaretPosition(0);
+        } else {
+            if (activityLog.getText().isEmpty()) {
+                activityLog.setText(text);
+            } else {
+                activityLog.setText(activityLog.getText() + "\n" + text);
+                activityLog.setCaretPosition(activityLog.getText().length());
+            }
+        }
     }
 
     private void error(String title, String message) {
@@ -516,10 +535,17 @@ public class UI extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         tabPanel = new javax.swing.JTabbedPane();
         htmlPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        activityLog = new javax.swing.JTextArea();
 
         statPanel.setBackground(new java.awt.Color(0, 0, 0));
         statPanel.setForeground(new java.awt.Color(255, 255, 255));
@@ -632,9 +658,9 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(startGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(mainMenuLayout.createSequentialGroup()
-                        .addComponent(saveGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(saveGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(loadGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
                     .addGroup(mainMenuLayout.createSequentialGroup()
                         .addComponent(importGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -754,6 +780,8 @@ public class UI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        settingFrame.setTitle("Settings");
+
         jToggleButton1.setSelected(true);
         jToggleButton1.setText("On");
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -809,6 +837,25 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setText("Activity Log - Newest On: ");
+
+        buttonGroup2.add(jRadioButton5);
+        jRadioButton5.setSelected(true);
+        jRadioButton5.setText("Top");
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup2.add(jRadioButton6);
+        jRadioButton6.setText("Bottom");
+        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -833,7 +880,13 @@ public class UI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jRadioButton3)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton4)))
+                        .addComponent(jRadioButton4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButton6)))
                 .addContainerGap(149, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -854,7 +907,12 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton3)
                     .addComponent(jRadioButton4))
-                .addContainerGap(367, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jRadioButton5)
+                    .addComponent(jRadioButton6))
+                .addContainerGap(339, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout settingFrameLayout = new javax.swing.GroupLayout(settingFrame.getContentPane());
@@ -868,7 +926,11 @@ public class UI extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("jRadioButtonMenuItem1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -891,29 +953,40 @@ public class UI extends javax.swing.JFrame {
         htmlPanel.setLayout(htmlPanelLayout);
         htmlPanelLayout.setHorizontalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         htmlPanelLayout.setVerticalGroup(
             htmlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 371, Short.MAX_VALUE)
         );
+
+        activityLog.setEditable(false);
+        activityLog.setColumns(20);
+        activityLog.setLineWrap(true);
+        activityLog.setRows(5);
+        activityLog.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(activityLog);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(htmlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(htmlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(tabPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                .addComponent(tabPanel)
                 .addGap(29, 29, 29))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addComponent(htmlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -993,14 +1066,14 @@ public class UI extends javax.swing.JFrame {
     private void setCombatStageText(boolean hasImage, boolean playerDead, boolean enemyDead) {
         if (!playerDead && !enemyDead) {
             if (!hasImage) {
-                updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()) + formatCombatLog());
+                updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()) );
             } else {
                 File image = new File(gameDir + "/" + currStage.getImage());
                 String path = "";
                 try {
                     path = image.toURI().toURL().toExternalForm();
                 } catch (MalformedURLException ex) {
-                    updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()) + formatCombatLog());
+                    updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()));
                     return;
                 }
                 String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
@@ -1008,25 +1081,24 @@ public class UI extends javax.swing.JFrame {
                 if (currStage.getOptions().size() > 0) {
                     output += "<br>" + formatText("Other") + "<br>" + formatOptions(currStage.getOptions());
                 }
-                output += "<br>" + formatCombatLog();
                 updateText(output);
             }
         } else if (playerDead) {
             refreshStats();
             refreshInventory();
             if (!hasImage) {
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + formatCombatLog());
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" );
             } else {
                 File image = new File(gameDir + "/" + currStage.getImage());
                 String path = "";
                 try {
                     path = image.toURI().toURL().toExternalForm();
                 } catch (MalformedURLException ex) {
-                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + formatCombatLog());
+                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") );
                     return;
                 }
                 String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + pic + "<br>" + formatCombatLog());
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + pic );
             }
             try {
                 Thread.sleep(3000);
@@ -1039,18 +1111,18 @@ public class UI extends javax.swing.JFrame {
             refreshStats();
             refreshInventory();
             if (!hasImage) {
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + formatCombatLog());
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated"));
             } else {
                 File image = new File(gameDir + "/" + currStage.getImage());
                 String path = "";
                 try {
                     path = image.toURI().toURL().toExternalForm();
                 } catch (MalformedURLException ex) {
-                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + formatCombatLog());
+                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") );
                     return;
                 }
                 String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + pic + "<br>" + formatCombatLog());
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + pic );
             }
             try {
                 Thread.sleep(3000);
@@ -1078,13 +1150,6 @@ public class UI extends javax.swing.JFrame {
         //htmlEditor.setCaretPosition(htmlEditor.getText().length());
         refreshStats();
         refreshInventory();
-    }
-
-    private String formatCombatLog() {
-        return "<p style='color: " + hexValue(set.getValue("TextColor"))
-                + "; font-size: " + gameSettings.getValue("User-Font")
-                + "px; font-family: " + set.getValue("Font") + "'>"
-                + currStage.getCombat().getCombatLog() + "</p>";
     }
 
     private String formatCombatOptions() {
@@ -1252,12 +1317,23 @@ public class UI extends javax.swing.JFrame {
         if (option.getStatMod().length > 0) {
             for (int i = 0; i < option.getStatMod().length; i++) {
                 player.adjustStat(option.getStatMod()[i], option.getStatModAmt()[i], Integer.parseInt(set.getValue("MaxStat")));
+                if (option.getStatModAmt()[i] < 0) {
+                    updateActivityLog(option.getStatMod()[i] + " decreased by " + Math.abs(option.getStatModAmt()[i]));
+                } else {
+                    updateActivityLog(option.getStatMod()[i] + " increased by " + option.getStatModAmt()[i]);
+                }
             }
         }
         if (option.getItemMod().length > 0) {
             for (int i = 0; i < option.getItemMod().length; i++) {
                 player.adjustInv(option.getItemMod()[i], option.getItemModAmt()[i]);
+                if (option.getItemModAmt()[i] < 0) {
+                    updateActivityLog(Math.abs(option.getItemModAmt()[i]) + " " + option.getItemMod()[i] + " removed");
+                } else {
+                    updateActivityLog(option.getItemModAmt()[i] + " " + option.getItemMod()[i] + " added");
+                }
             }
+
         }
         refreshStats();
         refreshInventory();
@@ -1267,9 +1343,9 @@ public class UI extends javax.swing.JFrame {
         int enemyDamage = currStage.getCombat().enemyAttacks();
         player.adjustStat("Health", enemyDamage * -1, Integer.parseInt(set.getValue("MaxStat")));
         if (enemyDamage > 0) {
-            currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " attacks you for " + enemyDamage + " damage. Your health: " + player.getStat("Health") + "/" + set.getValue("MaxHealth"));
+            updateActivityLog("The " + currStage.getCombat().getEnemyName() + " attacks you for " + enemyDamage + " damage. Your health: " + player.getStat("Health") + "/" + set.getValue("MaxHealth"));
         } else {
-            currStage.getCombat().addToLog("The " + currStage.getCombat().getEnemyName() + " misses its attack");
+            updateActivityLog("The " + currStage.getCombat().getEnemyName() + " misses its attack");
         }
     }
 
@@ -1286,9 +1362,9 @@ public class UI extends javax.swing.JFrame {
         dmg = dmgHandicap + (int) Math.ceil((double) damagePercent * (double) dmg);
         if (hitStat > rand) {
             currStage.getCombat().attackEnemy(dmg);
-            currStage.getCombat().addToLog("You attack the  " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage. Enemy Health: " + currStage.getCombat().getEnemyHealth() + "/" + currStage.getCombat().getMaxEnemyHealth());
+            updateActivityLog("You attack the " + currStage.getCombat().getEnemyName() + " with your " + name + " dealing " + dmg + " damage. Enemy Health: " + currStage.getCombat().getEnemyHealth() + "/" + currStage.getCombat().getMaxEnemyHealth());
         } else {
-            currStage.getCombat().addToLog("Your attack misses");
+            updateActivityLog("Your attack misses");
         }
         if (!weapon.getReqItem().isEmpty()) {
             player.adjustInv(weapon.getReqItem(), weapon.getReqItemAmt() * -1);
@@ -1418,7 +1494,7 @@ public class UI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            sm = new StageManager(new File(gameDir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"), Integer.parseInt(set.getValue("MaxStat")));
+            sm = new StageManager(new File(gameDir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
         } catch (Exception ex) {
             error("Load Error", ex.getMessage());
         }
@@ -1515,6 +1591,37 @@ public class UI extends javax.swing.JFrame {
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
         updateTabs(JTabbedPane.RIGHT);
     }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        updateActivityLogSet(1);
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+        updateActivityLogSet(2);
+    }//GEN-LAST:event_jRadioButton6ActionPerformed
+    private void updateActivityLogSet(int direction) {
+        if (Integer.parseInt(gameSettings.getValue("ActivityLog")) != direction) {
+            String[] log = activityLog.getText().split("\n");
+            String out = "";
+            for (int i = log.length - 1; i >= 0; i--) {
+                if (i != 0) {
+                    out += log[i] + "\n";
+                } else {
+                    out += log[i];
+                }
+            }
+            activityLog.setText(out);
+        } else {
+            return;
+        }
+        try {
+            gameSettings.updateValue("ActivityLog", direction + "");
+            gameSettings.writeChanges();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void updateTabs(int location) {
         try {
             tabPanel.setTabPlacement(location);
@@ -1709,7 +1816,9 @@ public class UI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea activityLog;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JPanel debugPanel;
     private javax.swing.JEditorPane htmlEditor;
     private javax.swing.JPanel htmlPanel;
@@ -1728,11 +1837,16 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
