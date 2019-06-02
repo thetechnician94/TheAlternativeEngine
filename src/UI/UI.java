@@ -541,6 +541,8 @@ public class UI extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        popupMenu1 = new java.awt.PopupMenu();
+        menuItem1 = new java.awt.MenuItem();
         mainPanel = new javax.swing.JPanel();
         tabPanel = new javax.swing.JTabbedPane();
         htmlPanel = new javax.swing.JPanel();
@@ -929,6 +931,16 @@ public class UI extends javax.swing.JFrame {
         jRadioButtonMenuItem1.setSelected(true);
         jRadioButtonMenuItem1.setText("jRadioButtonMenuItem1");
 
+        popupMenu1.setLabel("popupMenu1");
+
+        menuItem1.setLabel("Clear");
+        menuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem1ActionPerformed(evt);
+            }
+        });
+        popupMenu1.add(menuItem1);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -965,6 +977,11 @@ public class UI extends javax.swing.JFrame {
         activityLog.setLineWrap(true);
         activityLog.setRows(5);
         activityLog.setWrapStyleWord(true);
+        activityLog.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                activityLogMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(activityLog);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -1604,6 +1621,17 @@ public class UI extends javax.swing.JFrame {
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
         updateActivityLogSet(2);
     }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void activityLogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityLogMouseReleased
+        if (evt.isPopupTrigger()) {
+            this.add(popupMenu1);
+            popupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_activityLogMouseReleased
+
+    private void menuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem1ActionPerformed
+        activityLog.setText("");
+    }//GEN-LAST:event_menuItem1ActionPerformed
     private void updateActivityLogSet(int direction) {
         if (Integer.parseInt(gameSettings.getValue("ActivityLog")) != direction) {
             String[] log = activityLog.getText().split("\n");
@@ -1863,6 +1891,8 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JButton loadGameButton;
     private javax.swing.JPanel mainMenu;
     private javax.swing.JPanel mainPanel;
+    private java.awt.MenuItem menuItem1;
+    private java.awt.PopupMenu popupMenu1;
     private javax.swing.JButton saveGameButton;
     private javax.swing.JFrame settingFrame;
     private javax.swing.JButton startGameButton;
