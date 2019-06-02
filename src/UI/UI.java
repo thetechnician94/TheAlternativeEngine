@@ -52,6 +52,7 @@ public class UI extends javax.swing.JFrame {
     private String gameDir;
     private Setting gameSettings;
     private String lastAttemptedLoad = "";
+    private String currMusicFile = "";
 
     public UI() {
         initComponents();
@@ -100,55 +101,54 @@ public class UI extends javax.swing.JFrame {
     private void importGame(String dir) {
 
         try {
-            initSettings(dir);
-        } catch (IOException ex) {
+
             try {
-                error("IOException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
-                gameSettings.updateValue("DefaultGame", "None");
-                gameSettings.writeChanges();
-                return;
-            } catch (FileNotFoundException ex1) {
-                error("FileNotFoundException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
+                initSettings(dir);
+            } catch (IOException ex) {
+                try {
+                    error("IOException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
+                    gameSettings.updateValue("DefaultGame", "None");
+                    gameSettings.writeChanges();
+                    return;
+                } catch (FileNotFoundException ex1) {
+                    error("FileNotFoundException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
+                    return;
+                }
+            }
+            try {
+                try {
+                    sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
+                } catch (NumberFormatException ex) {
+                    error("Stage Loading Error", ex.getMessage());
+                    return;
+                } catch (NoSuchElementException ex) {
+                    error("Stage Loading Error", ex.getMessage());
+                    return;
+                } catch (DuplicateStageException ex) {
+                    error("Stage Loading Error", ex.getMessage());
+                    return;
+                }
+            } catch (FileNotFoundException ex) {
+                error("FileNotFoundException", "Error when initializing stages:\n" + ex.getMessage());
                 return;
             }
-        }
-        try {
-            try {
-                sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
-            } catch (NumberFormatException ex) {
-                error("Stage Loading Error", ex.getMessage());
-                return;
-            } catch (NoSuchElementException ex) {
-                error("Stage Loading Error", ex.getMessage());
-                return;
-            } catch (DuplicateStageException ex) {
-                error("Stage Loading Error", ex.getMessage());
-                return;
-            }
+            initTextArea();
+            initColor();
+            initWeapons(dir);
+            this.setTitle(set.getValue("GameName"));
+            startGameButton.setEnabled(true);
+            saveGameButton.setEnabled(true);
+            loadGameButton.setEnabled(true);
+            gameDir = dir;
+            gameSettings.updateValue("DefaultGame", gameDir);
+            gameSettings.writeChanges();
+            titleLabel.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
+            currStage = null;
+            updateText("");
         } catch (FileNotFoundException ex) {
-            error("FileNotFoundException", "Error when initializing stages:\n" + ex.getMessage());
+            error("FileNotFoundException", "Couldn't import last played game. Was it moved?\n" + ex.getMessage());
             return;
         }
-        initTextArea();
-        initColor();
-        initWeapons(dir);
-        this.setTitle(set.getValue("GameName"));
-        startGameButton.setEnabled(true);
-        saveGameButton.setEnabled(true);
-        loadGameButton.setEnabled(true);
-        gameDir = dir;
-        if (gameSettings.getValue("DefaultGame").equals("None")) {
-            try {
-                gameSettings.updateValue("DefaultGame", gameDir);
-                gameSettings.writeChanges();
-            } catch (FileNotFoundException ex) {
-                error("FileNotFoundException", "Error when initializing default game save\nThis won't prevent the game from running, but you will have to re-import next time:\n" + ex.getMessage());
-            }
-
-        }
-        titleLabel.setText("<html><h1>" + formatTitle(set.getValue("GameName")) + "</h1></html>");
-        currStage = null;
-        updateText("");
     }
 
     private void initWeapons(String dir) {
@@ -163,7 +163,8 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void initSettingsFrame() {
-        jToggleButton1.setSelected(Boolean.getBoolean(gameSettings.getValue("Music")));
+        boolean music = Boolean.parseBoolean(gameSettings.getValue("Music"));
+        jToggleButton1.setSelected(music);
         if (jToggleButton1.isSelected()) {
             jToggleButton1.setText("On");
         } else {
@@ -1225,6 +1226,9 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void playMusic() {
+        if (!currStage.getMusic().isEmpty()) {
+            currMusicFile = currStage.getMusic();
+        }
         if (!currStage.getMusic().isEmpty() && jToggleButton1.isSelected()) {
             if (!new File(gameDir + "/" + currStage.getMusic()).exists()) {
                 error("FileNotFound", "Could not locate music file for stage " + currStage.getId());
@@ -1431,6 +1435,7 @@ public class UI extends javax.swing.JFrame {
                 return;
             }
         }
+        activityLog.setText("");
         initPlayer(name);
         initTabs();
         gotoStage(1);
@@ -1497,6 +1502,7 @@ public class UI extends javax.swing.JFrame {
                 }
             }
             saveGame(file);
+
         }
 
     }//GEN-LAST:event_saveGameButtonActionPerformed
@@ -1535,7 +1541,6 @@ public class UI extends javax.swing.JFrame {
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         if (jToggleButton1.isSelected()) {
             jToggleButton1.setText("On");
-
         } else {
             jToggleButton1.setText("Off");
         }
@@ -1546,17 +1551,16 @@ public class UI extends javax.swing.JFrame {
             error("FileNotFoundException", "Couldn't write settings\n" + ex.getMessage());
         }
         if (audioPlayer == null) {
-            if (currStage == null || currStage.getMusic().isEmpty()) {
-                return;
-            }
             try {
-                audioPlayer = new SimpleAudioPlayer(gameDir + "/" + currStage.getMusic());
+                if (!currMusicFile.isEmpty()) {
+                    audioPlayer = new SimpleAudioPlayer(gameDir + "/" + currMusicFile);
+                }
             } catch (LineUnavailableException ex) {
-                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (UnsupportedAudioFileException ex) {
-                Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (jToggleButton1.isSelected()) {
@@ -1566,15 +1570,15 @@ public class UI extends javax.swing.JFrame {
             try {
                 audioPlayer.resetAudioStream();
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                Logger.getLogger(UI.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(UI.class
+                //       .getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             try {
                 audioPlayer.stop();
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                Logger.getLogger(UI.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                // Logger.getLogger(UI.class
+                // .getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -1791,6 +1795,7 @@ public class UI extends javax.swing.JFrame {
                 stage = Integer.parseInt(line);
             }
         }
+        activityLog.setText("");
         initTabs();
         refreshStats();
         refreshInventory();
