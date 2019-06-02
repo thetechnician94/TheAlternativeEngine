@@ -1066,7 +1066,7 @@ public class UI extends javax.swing.JFrame {
     private void setCombatStageText(boolean hasImage, boolean playerDead, boolean enemyDead) {
         if (!playerDead && !enemyDead) {
             if (!hasImage) {
-                String output = formatText(currStage.getText()) + "<br>"+formatText("Attack") + "<br>" + formatCombatOptions();
+                String output = formatText(currStage.getText()) + "<br>" + formatText("Attack") + "<br>" + formatCombatOptions();
                 if (currStage.getOptions().size() > 0) {
                     output += "<br>" + formatText("Other") + "<br>" + formatOptions(currStage.getOptions());
                 }
@@ -1482,6 +1482,7 @@ public class UI extends javax.swing.JFrame {
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         debugItemMod();
+
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -1660,6 +1661,7 @@ public class UI extends javax.swing.JFrame {
             player.adjustStat(stat, amt, Integer.parseInt(set.getValue("MaxStat")));
         }
         refreshStats();
+        drawStage();
     }
 
     private void debugItemMod() {
@@ -1678,6 +1680,7 @@ public class UI extends javax.swing.JFrame {
         }
         player.adjustInv(item, qty);
         refreshInventory();
+        drawStage();
     }
 
     private void saveGame(File file) {
