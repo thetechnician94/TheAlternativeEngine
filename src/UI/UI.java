@@ -543,6 +543,7 @@ public class UI extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         popupMenu1 = new java.awt.PopupMenu();
         menuItem1 = new java.awt.MenuItem();
+        menuItem2 = new java.awt.MenuItem();
         mainPanel = new javax.swing.JPanel();
         tabPanel = new javax.swing.JTabbedPane();
         htmlPanel = new javax.swing.JPanel();
@@ -940,6 +941,14 @@ public class UI extends javax.swing.JFrame {
             }
         });
         popupMenu1.add(menuItem1);
+
+        menuItem2.setLabel("Reverse Direction");
+        menuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItem2ActionPerformed(evt);
+            }
+        });
+        popupMenu1.add(menuItem2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -1632,6 +1641,16 @@ public class UI extends javax.swing.JFrame {
     private void menuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem1ActionPerformed
         activityLog.setText("");
     }//GEN-LAST:event_menuItem1ActionPerformed
+
+    private void menuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItem2ActionPerformed
+        if (gameSettings.getValue("ActivityLog").equals("1")) {
+            updateActivityLogSet(2);
+            jRadioButton6.setSelected(true);
+        } else {
+            updateActivityLogSet(1);
+            jRadioButton5.setSelected(true);
+        }
+    }//GEN-LAST:event_menuItem2ActionPerformed
     private void updateActivityLogSet(int direction) {
         if (Integer.parseInt(gameSettings.getValue("ActivityLog")) != direction) {
             String[] log = activityLog.getText().split("\n");
@@ -1892,6 +1911,7 @@ public class UI extends javax.swing.JFrame {
     private javax.swing.JPanel mainMenu;
     private javax.swing.JPanel mainPanel;
     private java.awt.MenuItem menuItem1;
+    private java.awt.MenuItem menuItem2;
     private java.awt.PopupMenu popupMenu1;
     private javax.swing.JButton saveGameButton;
     private javax.swing.JFrame settingFrame;

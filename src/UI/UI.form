@@ -587,6 +587,14 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem1ActionPerformed"/>
           </Events>
         </MenuItem>
+        <MenuItem class="java.awt.MenuItem" name="menuItem2">
+          <Properties>
+            <Property name="label" type="java.lang.String" value="Reverse Direction"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItem2ActionPerformed"/>
+          </Events>
+        </MenuItem>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
