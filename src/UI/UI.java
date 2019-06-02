@@ -812,7 +812,7 @@ public class UI extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Tabs Location: ");
+        jLabel6.setText("Tab Location: ");
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Top");
