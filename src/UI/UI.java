@@ -1066,7 +1066,11 @@ public class UI extends javax.swing.JFrame {
     private void setCombatStageText(boolean hasImage, boolean playerDead, boolean enemyDead) {
         if (!playerDead && !enemyDead) {
             if (!hasImage) {
-                updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()) );
+                String output = formatText(currStage.getText()) + "<br>"+formatText("Attack") + "<br>" + formatCombatOptions();
+                if (currStage.getOptions().size() > 0) {
+                    output += "<br>" + formatText("Other") + "<br>" + formatOptions(currStage.getOptions());
+                }
+                updateText(output);
             } else {
                 File image = new File(gameDir + "/" + currStage.getImage());
                 String path = "";
@@ -1087,18 +1091,18 @@ public class UI extends javax.swing.JFrame {
             refreshStats();
             refreshInventory();
             if (!hasImage) {
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" );
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>");
             } else {
                 File image = new File(gameDir + "/" + currStage.getImage());
                 String path = "";
                 try {
                     path = image.toURI().toURL().toExternalForm();
                 } catch (MalformedURLException ex) {
-                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") );
+                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow"));
                     return;
                 }
                 String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + pic );
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + pic);
             }
             try {
                 Thread.sleep(3000);
@@ -1118,11 +1122,11 @@ public class UI extends javax.swing.JFrame {
                 try {
                     path = image.toURI().toURL().toExternalForm();
                 } catch (MalformedURLException ex) {
-                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") );
+                    updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated"));
                     return;
                 }
                 String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
-                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + pic );
+                updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + pic);
             }
             try {
                 Thread.sleep(3000);
@@ -1146,8 +1150,9 @@ public class UI extends javax.swing.JFrame {
             } else {
                 setCombatStageText(true, playerDead, enemyDead);
             }
+
         }
-        //htmlEditor.setCaretPosition(htmlEditor.getText().length());
+        htmlEditor.setCaretPosition(0);
         refreshStats();
         refreshInventory();
     }
@@ -1370,7 +1375,6 @@ public class UI extends javax.swing.JFrame {
             player.adjustInv(weapon.getReqItem(), weapon.getReqItemAmt() * -1);
         }
         if (currStage.getCombat().getEnemyHealth() > 0) {
-            drawCombatStage();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
