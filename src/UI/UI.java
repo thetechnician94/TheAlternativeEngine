@@ -114,9 +114,6 @@ public class UI extends javax.swing.JFrame {
                     return;
                 }
             }
-            if (gameSettings.getValue("DefaultGame").equals("None")) {
-                return;
-            }
             try {
                 try {
                     sm = new StageManager(new File(dir + "/" + set.getValue("Stages")), set.getValue("StageDelimiter"));
