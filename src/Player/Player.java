@@ -88,7 +88,7 @@ public class Player {
                 return item.getQty();
             }
         }
-        return -1;
+        return 0;
     }
 
     public String getInventory() {

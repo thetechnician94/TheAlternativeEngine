@@ -335,11 +335,11 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void refreshStats() {
-        statText.setText(player.getName()+"'s Stats" + "\n\n" + player.getStats());
+        statText.setText(player.getName() + "'s Stats" + "\n\n" + player.getStats());
     }
 
     private void refreshInventory() {
-        invText.setText(player.getName()+"'s Inventory" + "\n\n" + player.getInventory());
+        invText.setText(player.getName() + "'s Inventory" + "\n\n" + player.getInventory());
     }
 
     private Color getColor(String colorString) {
@@ -1306,7 +1306,11 @@ public class UI extends javax.swing.JFrame {
         boolean reqsMet = true;
         if (option.getReqItem().length > 0) {
             for (int i = 0; i < option.getReqItem().length; i++) {
-                if (player.getItem(option.getReqItem()[i]) < option.getReqItemAmt()[i]) {
+                if ((option.getReqItemAmt()[i] == 0) && (player.getItem(option.getReqItem()[i]) == 0)) {
+                    continue;
+                } else if ((option.getReqItemAmt()[i] == 0) && (player.getItem(option.getReqItem()[i]) > 0)) {
+                    reqsMet = false;
+                } else if (player.getItem(option.getReqItem()[i]) < option.getReqItemAmt()[i]) {
                     reqsMet = false;
                 }
             }
@@ -1331,7 +1335,11 @@ public class UI extends javax.swing.JFrame {
                     if (player.getItem(option.getReqItem()[i]) < option.getReqItemAmt()[i]) {
                         html += formatColor("<c " + hexValue(set.getValue("UnmetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
                     } else {
-                        html += formatColor("<c " + hexValue(set.getValue("PartialMetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
+                        if (option.getReqItemAmt()[i]>0) {
+                            html += formatColor("<c " + hexValue(set.getValue("PartialMetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
+                        }else{
+                            html += formatColor("<c " + hexValue(set.getValue("UnmetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
+                        }
                     }
                 }
 
