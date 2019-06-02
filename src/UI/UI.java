@@ -801,6 +801,11 @@ public class UI extends javax.swing.JFrame {
 
         jComboBox1.setEditable(true);
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "8", "12", "14", "16", "18", "20", "22", "24", "26", "28", "32" }));
+        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jComboBox1MouseReleased(evt);
+            }
+        });
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -1657,6 +1662,24 @@ public class UI extends javax.swing.JFrame {
             jRadioButton5.setSelected(true);
         }
     }//GEN-LAST:event_menuItem2ActionPerformed
+
+    private void jComboBox1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseReleased
+        try {
+
+            if (set != null) {
+                initColor();
+            }
+            initTabs();
+            if (currStage != null) {
+                drawStage();
+            }
+            gameSettings.updateValue("User-Font", (String) jComboBox1.getSelectedItem());
+            gameSettings.writeChanges();
+        } catch (FileNotFoundException ex) {
+            error("FileNotFoundException", "Couldn't write settings\n" + ex.getMessage());
+        }
+
+    }//GEN-LAST:event_jComboBox1MouseReleased
     private void updateActivityLogSet(int direction) {
         if (Integer.parseInt(gameSettings.getValue("ActivityLog")) != direction) {
             String[] log = activityLog.getText().split("\n");
