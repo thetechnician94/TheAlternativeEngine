@@ -265,6 +265,9 @@ public class UI extends javax.swing.JFrame {
 
     private void initPlayer(String name) {
         player = new Player(name);
+        if(Boolean.parseBoolean(set.getValue("UseHealth"))){
+            player.adjustStat("Health",Integer.parseInt(set.getValue("MaxHealth")), Integer.parseInt(set.getValue("MaxHealth")));
+        }
         refreshStats();
         refreshInventory();
     }
@@ -1256,14 +1259,14 @@ public class UI extends javax.swing.JFrame {
                         + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                         + "px; font-family: " + set.getValue("Font")
                         + "' href='" + option.getId() + "," + option.getNextStage()
-                        + "'>" + req + formatColor(option.getText())
+                        + "'>" + req + formatColor(option.getText().replace("<PLAYERNAME>", player.getName()))
                         + "</a></li>";
             } else if (showOption) {
                 html += "<li><span style='color: "
                         + hexValue(set.getValue("UnusableOptionColor"))
                         + "; text-decoration:none; font-size: " + gameSettings.getValue("User-Font")
                         + "px; font-family: " + set.getValue("Font")
-                        + "'>" + req + formatColor(option.getText())
+                        + "'>" + req + formatColor(option.getText().replace("<PLAYERNAME>", player.getName()))
                         + "</a></li>";
             }
         }
