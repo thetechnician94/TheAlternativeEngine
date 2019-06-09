@@ -221,9 +221,6 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("DamageHandicap")) {
             set.updateValue("DamageHandicap", "0.25");
         }
-        if (set.addKey("MaxCombatLog")) {
-            set.updateValue("MaxCombatLog", "2");
-        }
         if (set.addKey("MaxStat")) {
             set.updateValue("MaxStat", "40");
         }
