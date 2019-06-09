@@ -177,7 +177,7 @@ public class UI extends javax.swing.JFrame {
 
     private void initSettings(String dir) throws FileNotFoundException, IOException {
 
-        set = new Setting(new File(dir + "/" + "Settings.txt"));
+        set = new Setting(new File(dir + "/" + "GameConfig.txt"));
 
         if (set.addKey("GameName")) {
             set.updateValue("GameName", "Test Game");
@@ -233,9 +233,6 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("MaxHealth")) {
             set.updateValue("MaxHealth", "100");
         }
-        if (set.addKey("StatFile")) {
-            set.updateValue("StatFile", "Stats.txt");
-        }
         if (set.addKey("UseInventory")) {
             set.updateValue("UseInventory", "FALSE");
         }
@@ -267,37 +264,9 @@ public class UI extends javax.swing.JFrame {
     }
 
     private void initPlayer(String name) {
-        try {
-            Setting stats = new Setting(new File(gameDir + "/" + set.getValue("StatFile")));
-            if (Boolean.parseBoolean(set.getValue("UseHealth"))) {
-                if (stats.addKey("Health")) {
-                    stats.updateValue("Health", set.getValue("MaxHealth"));
-                    stats.writeChanges();
-                }
-            }
-            String[] statNames = stats.getKeys();
-            String[] statValues = stats.getValues();
-            ArrayList<Stat> statArray = new ArrayList();
-            for (int i = 0; i < statNames.length; i++) {
-                try {
-                    if (!statNames[i].equals("Health")) {
-                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxStat"))));
-                    } else {
-                        statArray.add(new Stat(statNames[i], Integer.parseInt(statValues[i]), Integer.parseInt(set.getValue("MaxHealth"))));
-                    }
-                } catch (NumberFormatException ex) {
-                    error("Stat Loading Error", ex.getMessage());
-                    System.exit(-8);
-                }
-            }
-
-            player = new Player(name, statArray);
-            refreshStats();
-            refreshInventory();
-        } catch (IOException ex) {
-            error("Couldn't load stat file", ex.getMessage());
-            System.exit(-7);
-        }
+        player = new Player(name);
+        refreshStats();
+        refreshInventory();
     }
 
     private void initTabs() {
@@ -1335,9 +1304,9 @@ public class UI extends javax.swing.JFrame {
                     if (player.getItem(option.getReqItem()[i]) < option.getReqItemAmt()[i]) {
                         html += formatColor("<c " + hexValue(set.getValue("UnmetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
                     } else {
-                        if (option.getReqItemAmt()[i]>0) {
+                        if (option.getReqItemAmt()[i] > 0) {
                             html += formatColor("<c " + hexValue(set.getValue("PartialMetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
-                        }else{
+                        } else {
                             html += formatColor("<c " + hexValue(set.getValue("UnmetRequirementColor")) + ">[" + option.getReqItem()[i] + ": " + option.getReqItemAmt()[i] + "] </c>");
                         }
                     }

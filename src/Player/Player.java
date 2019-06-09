@@ -18,10 +18,10 @@ public class Player {
     private ArrayList<Stat> stats;
     private ArrayList<Item> inv;
 
-    public Player(String name, ArrayList<Stat> stats) {
+    public Player(String name) {
         this.name = name;
-        this.stats = stats;
         inv = new ArrayList();
+        stats = new ArrayList();
     }
 
     public int getStat(String name) {
