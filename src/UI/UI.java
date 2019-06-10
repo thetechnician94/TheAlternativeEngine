@@ -254,6 +254,12 @@ public class UI extends javax.swing.JFrame {
         if (set.addKey("FullyMetRequirementColor")) {
             set.updateValue("FullyMetRequirementColor", "0,255,0");
         }
+        if (set.addKey("ImageWidth")) {
+            set.updateValue("ImageWidth", "800");
+        }
+        if (set.addKey("ImageHeight")) {
+            set.updateValue("ImageHeight", "400");
+        }
         if (gameSettings.getValue("User-Font") != null) {
             set.updateValue("TextSize", gameSettings.getValue("User-Font"));
         }
@@ -262,8 +268,8 @@ public class UI extends javax.swing.JFrame {
 
     private void initPlayer(String name) {
         player = new Player(name);
-        if(Boolean.parseBoolean(set.getValue("UseHealth"))){
-            player.adjustStat("Health",Integer.parseInt(set.getValue("MaxHealth")), Integer.parseInt(set.getValue("MaxHealth")));
+        if (Boolean.parseBoolean(set.getValue("UseHealth"))) {
+            player.adjustStat("Health", Integer.parseInt(set.getValue("MaxHealth")), Integer.parseInt(set.getValue("MaxHealth")));
         }
         refreshStats();
         refreshInventory();
@@ -1060,7 +1066,7 @@ public class UI extends javax.swing.JFrame {
                 updateText(formatText(currStage.getText()) + "<br>" + formatOptions(currStage.getOptions()));
                 return;
             }
-            String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
+            String pic = "<p style='text-align:center'><img width='"+set.getValue("ImageWidth")+"' height='"+set.getValue("ImageHeight")+"' " + "src='" + path + "' alt='Image not found'/></p>";
             updateText(formatText(currStage.getText()) + "<br>" + pic + "<br>" + formatOptions(currStage.getOptions()));
 
         }
@@ -1083,7 +1089,7 @@ public class UI extends javax.swing.JFrame {
                     updateText(formatText(currStage.getText()) + "<br>" + formatCombatOptions() + formatOptions(currStage.getOptions()));
                     return;
                 }
-                String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
+                String pic = "<p style='text-align:center'><img width='"+set.getValue("ImageWidth")+"' height='"+set.getValue("ImageHeight")+"' " + "src='" + path + "' alt='Image not found'/></p>";
                 String output = formatText(currStage.getText()) + "<br>" + pic + "<br>" + formatText("Attack") + "<br>" + formatCombatOptions();
                 if (currStage.getOptions().size() > 0) {
                     output += "<br>" + formatText("Other") + "<br>" + formatOptions(currStage.getOptions());
@@ -1104,7 +1110,7 @@ public class UI extends javax.swing.JFrame {
                     updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow"));
                     return;
                 }
-                String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
+                String pic = "<p style='text-align:center'><img width='"+set.getValue("ImageWidth")+"' height='"+set.getValue("ImageHeight")+"' " + "src='" + path + "' alt='Image not found'/></p>";
                 updateText(formatText("The " + currStage.getCombat().getEnemyName() + " has struck a fatal blow") + "<br>" + pic);
             }
             try {
@@ -1128,7 +1134,7 @@ public class UI extends javax.swing.JFrame {
                     updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated"));
                     return;
                 }
-                String pic = "<p style='text-align:center'><img " + "src='" + path + "' alt='Image not found'/></p>";
+                String pic = "<p style='text-align:center'><img width='"+set.getValue("ImageWidth")+"' height='"+set.getValue("ImageHeight")+"' " + "src='" + path + "' alt='Image not found'/></p>";
                 updateText(formatText("The " + currStage.getCombat().getEnemyName() + " lays defeated") + "<br>" + pic);
             }
             try {
